@@ -1,0 +1,47 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+{{ product.name }}
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+{% block content2 %}
+<h1 class="display-4 fw-normal text-center">{{ product.name }}</h1><br>
+            <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+                <h4>{{ product.description }}</h4>
+                <h4>{{ product.price }}</h4>
+                <img src="{{ product.image.url }}" width="300" height="300"/>
+                <ul><br><br>k
+                {% for offer in product.offer_set.all %}
+                    <li class="fs-5 text-muted">{{ offer.user }} предлагает {{ offer.price }}</li>
+                {% endfor %}
+                </ul>
+                <br>
+                {% if user.is_authenticated %}
+                    <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <h4>Предложите свою цену:</h4>
+                    {% for field2 in offer_form %}
+                      <div>
+                          <p class="fs-5 text-muted">{{ field2 }}</p>
+                          {% if field2.help_text %}
+                            <p class="fs-5 text-muted">{{ field2.help_text }}</p>
+                          {% endif %}
+                          {{ field2.errors }}
+                      </div>
+                    {% endfor %}
+                        <div>
+                            <input type="hidden" name="product" value="{{ product.id }}" />
+                        </div>
+                    <button type="submit" class="btn btn-secondary my-2" name="form_type" value="offer_form">Добавить offer</button>
+                    </form>
+                    <button type="submit" class="btn btn-secondary my-2">Написать продавцу</button>
+                    {% else %}
+                    <p1 class="fs-5 text-muted">Вы не вошли в аккаунт</p1><br><br>
+                    <a href="register" class="btn btn-secondary my-2">Зарегестрируйся, и оставь свой оффер</a>
+                {% endif %}
+            </div>
+        <p class="fs-5 text-muted">Да, много сегодня отзывов</p>
+    </div>
+{% endblock %}

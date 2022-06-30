@@ -1,0 +1,24 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+помощь
+{% endblock %}
+
+{% block content %}
+    <h1 class="display-4 fw-normal">Помощь</h1>
+    <h5 class="fs-5 text-muted">Наши контакты:</h5><br>
+    <p3 class="fs-5 text-muted">8 999 999 99 99</p3><br>
+    <p3 class="fs-5 text-muted">marks@gmail.com</p3><br>
+    <form  method="POST" class ="fs-5 text-muted"><br>
+        <h5>Вы столкнулись с проблемой?</h5>
+        <p>Напишите нам!</p>
+        <div class="d-flex w-100 gap-2">
+            <label for="newsletter1" class="visually-hidden">Адрес эл. почты</label>
+            <input id="newsletter1" type="text" class="form-control" placeholder="Введите адрес почты">
+            <button class="btn btn-secondary my-2" type="button">Отправить</button>
+        </div>
+    </form>
+{% endblock %}
+{% block content2 %}
+
+{% endblock %}

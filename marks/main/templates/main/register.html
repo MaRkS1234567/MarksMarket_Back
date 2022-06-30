@@ -1,0 +1,20 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+Регистрация
+{% endblock %}
+
+{% block content %}
+    <h1 class="display-4 fw-normal text-center">Зарегистрируйтесь</h1>
+    <form method="POST" class ="fs-5 text-muted">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-secondary my-2">Зарегистрироваться</button>
+    </form><br>
+    <p1 class="fs-5 text-muted">Вы уже зарегистрированны?</p1><br><br>
+    <a href="login" class="btn btn-secondary my-2">Войти</a>
+{% endblock %}
+
+{% block content2 %}
+
+{% endblock %}

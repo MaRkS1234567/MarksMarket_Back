@@ -1,0 +1,35 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+главная
+{% endblock %}
+{% block content %}
+
+    <h1 class="display-4 fw-normal text-center">Новости и дропы</h1><br>
+    <header></header>
+    {% if page %}
+        {% for news in page %}
+            <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+                <h3>{{ news.news }}</h3><br>
+                <img src="{{ news.imagenews.url }}" width="300" height="300"/><br><br>
+                <h4 class="fs-5 text-muted">Источник {{ news.source }}</h4>
+                <a class="btn btn-secondary my-2" href="{% url 'news' news.id %}">Комментарии</a>
+            </div>
+        {% endfor %}
+            {% if page.has_previous %}
+                <a href="?page=1" class="btn btn-secondary my-2">Первая страница</a>
+                <a href="?page={{ page.previous_page_number }}" class="btn btn-secondary my-2">Предыдущщяя</a>
+            {% endif %}
+            {% if page.has_next %}
+                <a href="?page={{ page.next_page_number }}" class="btn btn-secondary my-2">Следующая</a>
+                <a href="?page={{ page.paginator.num_pages }}" class="btn btn-secondary my-2">Поледняя страница</a>
+            {% endif %}
+        <span class="fs-5 text-muted">Страница {{ page.number }} из {{ page.paginator.num_pages }}</span><br><br>
+    {% else %}
+        <p class="fs-5 text-muted">Да, много сегодня новостей</p>
+    {% endif %}
+{% endblock %}
+{% block content2 %}
+
+{% endblock %}
+

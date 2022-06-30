@@ -1,0 +1,23 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+аккаунт
+{% endblock %}
+
+{% block content %}
+    <h1 class="display-4 fw-normal text-center">Ваш аккаунт</h1><br>
+    <h4 class="display-6 fw-normal">Избранные товары</h4><br>
+    {% if favorites %}
+        {% for favorite in favorites %}
+        <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark d-flex">
+            <a class="display-6 fw-normal" style="padding: 2.75rem 0;" href="{% url 'product' favorite.product.id %}">{{ favorite.product.name }}</a>
+            <img src="{{ favorite.product.image.url }}" width="150" height="150" style="margin-left:auto;" />
+        </div>
+        {% endfor %}
+    {% else %}
+        <a href="/shop" class="btn btn-secondary my-2">Корзина пуста!Скорее за покупками🤠</a>
+    {% endif %}
+{% endblock %}
+{% block content2 %}
+
+{% endblock %}

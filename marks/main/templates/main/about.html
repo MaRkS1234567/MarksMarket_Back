@@ -1,0 +1,64 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+Отзывы
+{% endblock %}
+
+{% block content %}
+<h1 class="display-4 fw-normal text-center">Про нас</h1>
+<p class="fs-5 text-muted">Сдесь вы можете посмотреть наши отзывы и оствить свой! </p>
+<p1 class ="fs-5 text-muted">Наша средняя оценка   </p1>
+<p1 class ="fs-5 text-muted">{{ average }}★</p1>
+<br>
+    {% if page %}
+        {% for review in page %}
+            <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+                <h3>{{ review.user }}:</h3>
+                <h4 class="fs-5 text-muted">{{ review.task }}</h4>
+                <h3>Оценка:</h3>
+                <h4 class="fs-5 text-muted">
+                    {% for _ in review.stars_range %}
+                      ★
+                    {% endfor %}
+                </h4>
+            </div>
+        {% endfor %}
+
+            {% if page.has_previous %}
+                <a href="?page=1" class="btn btn-secondary my-2">Первая страница</a>
+                <a href="?page={{ page.previous_page_number }}" class="btn btn-secondary my-2">Предыдущщяя</a>
+            {% endif %}
+            {% if page.has_next %}
+                <a href="?page={{ page.next_page_number }}" class="btn btn-secondary my-2">Следующая</a>
+                <a href="?page={{ page.paginator.num_pages }}" class="btn btn-secondary my-2">Поледняя страница</a>
+            {% endif %}
+
+            <span class="fs-5 text-muted">Страница {{ page.number }} из {{ page.paginator.num_pages }}</span><br><br>
+    {% else %}
+        <p class="fs-5 text-muted">Да, много сегодня отзывов</p>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+        <form method="post">
+            {% csrf_token %}
+            <p1 class="fs-5 text-muted">Твой отзыв:</p1>
+            {% for field in form %}
+              <div>
+                  {{ field }}<p1 class="fs-5 text-muted"></p1>
+                  {% if field.help_text %}
+                    <p class="fs-5 text-muted">{{ field.help_text }}</p>
+                  {% endif %}
+                  {{ field.errors }}
+              </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-secondary my-2">Добавить</button>
+        </form>
+    {% else %}
+        <p1 class="fs-5 text-muted">Вы не вошли в аккаунт</p1><br><br>
+        <a href="register" class="btn btn-secondary my-2">Зарегестрируйся, и оставь свой отзыв</a>
+    {% endif %}
+{% endblock %}
+
+{% block content2 %}
+
+{% endblock %}
