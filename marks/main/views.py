@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib import messages
-from django.db.models import Avg
+from django.db.models import Avg, Max, Min
 from django.core.paginator import Paginator
 from django.http import Http404
+
 
 
 from .models import Review, News, Product, Favorite
@@ -40,12 +41,34 @@ def index(request):
 
     return render(request, 'main/index.html', context)
 
-
 def shop(request):
+    min_price = Product.objects.aggregate(Min("price"))['price__min']
+    max_price = Product.objects.aggregate(Max("price"))['price__max']
+
+    query = request.GET.get("q")
+    min_ = request.GET.get("min")
+    max_ = request.GET.get("max")
+
     products = Product.objects.order_by('-id').prefetch_related('offer_set')
+    
+    if query is not None:
+        products = products.filter(name__icontains=query)
+        
+    if min_ is not None and min_.isdigit():
+        products = products.filter(price__gte=min_)
+
+    if max_ is not None and max_.isdigit():
+        products = products.filter(price__lte=max_)
+
     paginator = Paginator(products, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
+
+    context = {
+        'min_price': min_price,
+        'max_price': max_price,
+        'page': page,
+    }
 
     if request.method == 'POST':
         form_type = request.POST.get('form_type')
@@ -80,8 +103,10 @@ def shop(request):
                 #
                 # if not error:
                 #     offer.product = product
+            context['product_form'] = product_form
+            context['offer_form'] = offer_form
 
-            return render(request, 'main/shop.html', {'product_form': product_form, 'offer_form': offer_form, 'page': page})
+            return render(request, 'main/shop.html', context)
 
         elif form_type == 'product_form':
             product_form = ProductForm(request.POST, request.FILES)
@@ -91,17 +116,15 @@ def shop(request):
                 product_form.save()
                 return redirect('shop')
 
-            return render(request, 'main/shop.html',
-                          {'product_form': product_form, 'offer_form': offer_form, 'page': page})
+            context['product_form'] = product_form
+            context['offer_form'] = offer_form
 
-    context = {
-        'product_form': ProductForm(),
-        'offer_form': OfferForm(),
-        'page': page,
-    }
+            return render(request, 'main/shop.html', context)
+
+    context['product_form'] = ProductForm()
+    context['offer_form'] = OfferForm()
 
     return render(request, 'main/shop.html', context)
-
 
 def account(request):
 
