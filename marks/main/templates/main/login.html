@@ -1,16 +1,21 @@
 {% extends 'main/base.html' %}
 
-{% block title %}
-Войти
-{% endblock %}
+{% block title %}Войти{% endblock %}
 
 {% block content %}
-    <h1 class="display-4 fw-normal text-center">Войти в аккаунт</h1>
-    <form method="POST" class ="fs-5 text-muted">
+    <h1 class="display-4 fw-normal text-center">Войти в аккаунт</h1><br>
+    <form method="POST" class ="fs-5 text-muted text-center date">
         {% csrf_token %}
-        <p1 class ="fs-5 text-muted">{{ form.as_p }}</p1>
-        {{ error }}
-        <button type="submit" class="btn btn-secondary my-2">Войти</button>
+        <p class="fs-5 text-muted">Введите ваш логин:</p>
+        <p1>{{ form.username }}</p1><br>
+        <p class="fs-5 text-muted">Введите ваш пароль:</p>
+        <p1>{{ form.password }}</p1><br>
+        <p1>{{ error }}</p1>
+        <div class="text-align">
+            <button type="submit" class="btn btn-secondary me-2 mb-2">Войти</button><br><br>
+        </div>
+        <p1 class="fs-5 text-muted">Вы еще не зарегистрированны?</p1><br><br>
+        <a href="register" class="btn btn-secondary me-2 mb-2">Зарегистрироваться</a>
     </form>
 {% endblock %}
 

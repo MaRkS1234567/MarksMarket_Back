@@ -5,10 +5,12 @@
 {% endblock %}
 
 {% block content %}
-<h1 class="display-4 fw-normal text-center">Про нас</h1>
-<p class="fs-5 text-muted">Сдесь вы можете посмотреть наши отзывы и оствить свой! </p>
-<p1 class ="fs-5 text-muted">Наша средняя оценка   </p1>
-<p1 class ="fs-5 text-muted">{{ average }}★</p1>
+<h1 class="display-4 fw-normal text-center">О нас</h1>
+<div class="text-center">
+    <p class="fs-5 text-muted">Сдесь вы можете посмотреть наши отзывы и оствить свой! </p>
+    <p1 class ="fs-5 text-muted">Наша средняя оценка   </p1>
+    <p1 class ="fs-5 text-muted">{{ average }}★</p1>
+</div>
 <br>
     {% if page %}
         {% for review in page %}
@@ -17,20 +19,18 @@
                 <h4 class="fs-5 text-muted">{{ review.task }}</h4>
                 <h3>Оценка:</h3>
                 <h4 class="fs-5 text-muted">
-                    {% for _ in review.stars_range %}
-                      ★
-                    {% endfor %}
+                    {% for _ in review.stars_range %}★{% endfor %}
                 </h4>
             </div>
         {% endfor %}
 
             {% if page.has_previous %}
-                <a href="?page=1" class="btn btn-secondary my-2">Первая страница</a>
-                <a href="?page={{ page.previous_page_number }}" class="btn btn-secondary my-2">Предыдущщяя</a>
+                <a href="?page=1" class="btn btn-secondary my-2 mb-2">Первая страница</a>
+                <a href="?page={{ page.previous_page_number }}" class="btn btn-secondary my-2 mb-2">Предыдущщяя</a>
             {% endif %}
             {% if page.has_next %}
-                <a href="?page={{ page.next_page_number }}" class="btn btn-secondary my-2">Следующая</a>
-                <a href="?page={{ page.paginator.num_pages }}" class="btn btn-secondary my-2">Поледняя страница</a>
+                <a href="?page={{ page.next_page_number }}" class="btn btn-secondary my-2 mb-2">Следующая</a>
+                <a href="?page={{ page.paginator.num_pages }}" class="btn btn-secondary my-2 mb-2">Поледняя страница</a>
             {% endif %}
 
             <span class="fs-5 text-muted">Страница {{ page.number }} из {{ page.paginator.num_pages }}</span><br><br>
@@ -39,7 +39,7 @@
     {% endif %}
 
     {% if user.is_authenticated %}
-        <form method="post">
+        <form method="post" class="date2">
             {% csrf_token %}
             <p1 class="fs-5 text-muted">Твой отзыв:</p1>
             {% for field in form %}
@@ -51,11 +51,11 @@
                   {{ field.errors }}
               </div>
             {% endfor %}
-            <button type="submit" class="btn btn-secondary my-2">Добавить</button>
+            <button type="submit" class="btn btn-secondary me-2 mb-2">Добавить</button>
         </form>
     {% else %}
         <p1 class="fs-5 text-muted">Вы не вошли в аккаунт</p1><br><br>
-        <a href="register" class="btn btn-secondary my-2">Зарегестрируйся, и оставь свой отзыв</a>
+        <a href="register" class="btn btn-secondary me-2 mb-2">Зарегестрируйся, и оставь свой отзыв</a>
     {% endif %}
 {% endblock %}
 

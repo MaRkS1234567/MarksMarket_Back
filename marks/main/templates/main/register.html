@@ -5,14 +5,20 @@
 {% endblock %}
 
 {% block content %}
-    <h1 class="display-4 fw-normal text-center">Зарегистрируйтесь</h1>
-    <form method="POST" class ="fs-5 text-muted">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-secondary my-2">Зарегистрироваться</button>
-    </form><br>
-    <p1 class="fs-5 text-muted">Вы уже зарегистрированны?</p1><br><br>
-    <a href="login" class="btn btn-secondary my-2">Войти</a>
+    <div class="text-center">
+        <h1 class="display-4 fw-normal text-center">Зарегистрируйтесь</h1><br>
+        <form method="POST" class ="fs-5 text-muted centres date">
+            {% csrf_token %}
+            <p class="fs-5 text-muted">Введите ваш логин:</p>
+            {{ form.username }}<br>
+            <p class="fs-5 text-muted">Введите ваш пароль:</p>
+            {{ form.password1 }}<br>
+            <p class="fs-5 text-muted">Повторите ваш пароль:</p>
+            {{ form.password2 }}<br>
+            {{ form.error }}
+            <button type="submit" class="btn btn-secondary me-2 mb-2">Зарегистрироваться</button>
+        </form><br>
+    </div>
 {% endblock %}
 
 {% block content2 %}

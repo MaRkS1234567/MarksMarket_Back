@@ -1,6 +1,8 @@
+from asyncio import SendfileNotAvailableError
 from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils import timezone
 
 
 class Review(models.Model):
@@ -16,8 +18,6 @@ class Review(models.Model):
         return range(self.stars)
 
     class Meta:
-        verbose_name = 'request'
-        verbose_name_plural = 'requests'
         constraints = [
             models.CheckConstraint(
                 name='valid_stars_range',
@@ -37,7 +37,7 @@ class News(models.Model):
 
 class Comment(models.Model):
     comment = models.TextField()
-    news = models.ForeignKey(News, on_delete=models.CASCADE)
+    news = models.ForeignKey(News, related_name='comments', on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -45,18 +45,22 @@ class Comment(models.Model):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=30)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    name = models.CharField(max_length=15)
     description = models.TextField()
     price = models.PositiveIntegerField()
     image = models.ImageField(upload_to='products/')
 
-    def __str__(self):
-        return self.name
+    def get_absolute_url(self):
+        return f'/account/'
+
+    # def __str__(self):
+    #     return self.name
 
 
 class Offer(models.Model):
     price = models.PositiveIntegerField()
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, related_name='offers', on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -70,6 +74,20 @@ class Favorite(models.Model):
     def __str__(self):
         return str(self.product)
 
+
+class Message(models.Model):
+    text = models.TextField()
+    created_at = models.DateTimeField('created', default=timezone.now, blank=True)
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='sent_messages', on_delete=models.CASCADE)
+    recipient = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='received_messages', on_delete=models.CASCADE)
+    
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                name="prevent_self_message",
+                check=~models.Q(sender=models.F('recipient'))
+            )
+        ]
 
 
 

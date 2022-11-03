@@ -6,17 +6,41 @@
 
 {% block content %}
     <h1 class="display-4 fw-normal text-center">Ваш аккаунт</h1><br>
-    <h4 class="display-6 fw-normal">Избранные товары</h4><br>
+    <h4 class="display-6 fw-normal text-center">Избранные товары</h4><br>
     {% if favorites %}
         {% for favorite in favorites %}
-        <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark d-flex">
-            <a class="display-6 fw-normal" style="padding: 2.75rem 0;" href="{% url 'product' favorite.product.id %}">{{ favorite.product.name }}</a>
+        <div class="p-4 p-md-5 mb-4  rounded bg-dark d-flex">
+            <a class="display-6 text-white fw-normal text-decoration-none" style="padding: 2.75rem 0;" href="{% url 'product' favorite.product.id %}">{{ favorite.product.name }}</a>
             <img src="{{ favorite.product.image.url }}" width="150" height="150" style="margin-left:auto;" />
+            <a href="{% url 'product-update' favorite.product.id %}" class="btn btn-danger">Update</a>
         </div>
         {% endfor %}
     {% else %}
-        <a href="/shop" class="btn btn-secondary my-2">Корзина пуста!Скорее за покупками🤠</a>
+    <div class="text-center">
+        <a href="{% url 'shop' %}" class="btn btn-secondary text-center">Корзина пуста! Скорее за покупками🤠</a>
+    </div>
     {% endif %}
+    <h4 class="display-6 fw-normal text-center my-3">Мои товары</h4><br>
+    
+    {% if products %}
+    
+    {% for product in products %}
+        <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark d-flex">
+            <a class="display-6 fw-normal text-white text-decoration-none" style="padding: 2.75rem 0;" href="{% url 'product' product.id %}">{{ product.name }}</a>
+            <img src="{{ product.image.url }}" width="150" height="150" style="margin-left:auto;" />
+        </div>
+        {% endfor %}
+    {% else %}
+    <div class="text-center">
+    <a href="{% url 'shop' %}" class="btn btn-secondary">Скорее выложете свой первый товар!</a>
+    </div>
+        {% endif %}
+        <form action="{% url 'logout' %}" method="POST">
+            {% csrf_token %}
+            <div class="text-center my-2">
+                <button type="submit" class="btn btn-secondary">Выйти из аккаунта</button>
+            </div>
+        </form>
 {% endblock %}
 {% block content2 %}
 

@@ -10,8 +10,8 @@
     <img src="{{ news.imagenews.url }}" width="300" height="300"/><br><br>
     <h4 class="fs-5 text-muted">Источник {{ news.source }}</h4><br>
     <h4>Комментарии:</h4><br>
-    {% if comment %}
-        {% for comment in news.comment_set.all %}
+    {% if news.comments %}
+        {% for comment in news.comments.all %}
         <ul>
             <li class="fs-5 text-muted">{{ comment.user }}: {{ comment.comment }}</li>
         </ul>
@@ -21,7 +21,7 @@
     {% endif %}
         <br>
         {% if user.is_authenticated %}
-            <form method="post" enctype="multipart/form-data">
+            <form method="post" enctype="multipart/form-data date2">
                 {% csrf_token %}
                 <h4>Прокомментируйте:</h4>
                 {% for field3 in comment_form %}
@@ -36,11 +36,11 @@
                     <div>
                         <input type="hidden" name="news" value="{{ news.id }}" />
                     </div>
-                <button type="submit" class="btn btn-secondary my-2" name="form_type" value="comment_form">Добавить комментарий</button>
+                <button type="submit" class="btn btn-secondary me-4 my-2 mb-2" name="form_type" value="comment_form">Добавить комментарий</button>
             </form>
             {% else %}
             <h4>Вы не вошли в аккаунт</h4><br>
-            <a href="register" class="btn btn-secondary my-2">Зарегестрируйся, и оставь свой комментарий</a>
+            <a href="register" class="btn btn-secondary me-2 mb-2">Зарегестрируйся, и оставь свой комментарий</a>
         {% endif %}
     </div>
 {% endblock %}

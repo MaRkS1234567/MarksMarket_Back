@@ -1,0 +1,22 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+Update
+{% endblock %}
+
+{% block content %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in favorite.product_form %}
+        <div>
+            <p1 class="fs-5 text-muted">{{ field }}</p1>
+            {% if field.help_text %}
+              <p class="fs-5 text-muted">{{ field.help_text }}</p>
+            {% endif %}
+            {{ field.errors }}
+        </div>
+      {% endfor %}
+        <h4 class="display-7 fw-normal my-4">*пожалуйста прикрепляйте картинку в квадратном формате.</h4>
+        <button type="submit" class="btn btn-secondary my-2 mb-2" name="form_type" value="product_form">Добавить</button>
+    </form>
+{% endblock %}

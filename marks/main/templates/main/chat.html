@@ -1,0 +1,32 @@
+{% extends 'main/base.html' %}
+
+{% block title %} главная {% endblock %} 
+
+{% block content %} 
+{% if chat_messages %}
+<div class="messages flex-column">
+<ul>
+  {% for message in chat_messages %}
+  <ol class="{% if request.user == message.sender %}message{% else %}message darker{% endif %}">
+    <p class="mb-0">{{message.text}}</p>
+  </ol>
+  {% endfor %}
+</ul>
+{% else %}
+    <p>Сообщений пока нет:(</p>
+{% endif %}
+
+<form method="post" class="d-flex">
+  {% csrf_token %} {% for field in form %}
+  <p class="fs-5 text-muted mb-2 searchmessage">{{ field }}</p>
+  {% if field.help_text %}
+  <p class="fs-5 text-muted">{{ field.help_text }}</p>
+  {% endif %}
+  <button type="submit" class="submit">▶️</button>
+  {% endfor %}
+</form>
+</div>
+{% endblock %}
+
+{% block content2 %}
+{% endblock %}

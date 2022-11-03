@@ -1,19 +1,21 @@
+from re import U
+from this import s
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, get_user_model
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib import messages
-from django.db.models import Avg, Max, Min
+from django.db.models import Avg, Max, Min, Q
 from django.core.paginator import Paginator
-from django.http import Http404
+from django.http import Http404, HttpRequest, HttpResponse
+from django.views.generic import UpdateView, DetailView
 
 
-
-from .models import Review, News, Product, Favorite
-from .forms import ReviewForm, ProductForm, OfferForm, CommentForm
+from .models import Review, News, Product, Favorite, Message
+from .forms import ReviewForm, ProductForm, OfferForm, CommentForm, MessageForm, AccountCreationForm, SigninForm
 
 
 def index(request):
-    news = News.objects.order_by('-id').prefetch_related('comment_set')
+    news = News.objects.order_by('-id').prefetch_related('comments')
     paginator = Paginator(news, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
@@ -41,6 +43,7 @@ def index(request):
 
     return render(request, 'main/index.html', context)
 
+
 def shop(request):
     min_price = Product.objects.aggregate(Min("price"))['price__min']
     max_price = Product.objects.aggregate(Max("price"))['price__max']
@@ -49,11 +52,11 @@ def shop(request):
     min_ = request.GET.get("min")
     max_ = request.GET.get("max")
 
-    products = Product.objects.order_by('-id').prefetch_related('offer_set')
-    
+    products = Product.objects.order_by('-id').prefetch_related('offers')
+
     if query is not None:
         products = products.filter(name__icontains=query)
-        
+
     if min_ is not None and min_.isdigit():
         products = products.filter(price__gte=min_)
 
@@ -68,24 +71,23 @@ def shop(request):
         'min_price': min_price,
         'max_price': max_price,
         'page': page,
+        'product_form': ProductForm(),
+        'offer_form': OfferForm(),
     }
 
     if request.method == 'POST':
         form_type = request.POST.get('form_type')
 
         if form_type == 'offer_form':
-            product_form = ProductForm()
             offer_form = OfferForm(request.POST)
 
             if offer_form.is_valid():
                 offer = offer_form.save(commit=False)
-                # TODO: product validation.
-                product_id = request.POST.get('products')
+                product_id = request.POST.get('product')
                 offer.product = Product.objects.get(id=int(product_id))
                 offer.user = request.user
                 offer.save()
                 return redirect('shop')
-
                 # error = ''
                 # if product_id is None:
                 #     error = 'No product_id'
@@ -103,33 +105,40 @@ def shop(request):
                 #
                 # if not error:
                 #     offer.product = product
-            context['product_form'] = product_form
             context['offer_form'] = offer_form
-
             return render(request, 'main/shop.html', context)
 
         elif form_type == 'product_form':
             product_form = ProductForm(request.POST, request.FILES)
-            offer_form = OfferForm()
 
             if product_form.is_valid():
-                product_form.save()
+                product = product_form.save(commit=False)
+                product.user = request.user
+                product.save()
                 return redirect('shop')
 
             context['product_form'] = product_form
-            context['offer_form'] = offer_form
-
             return render(request, 'main/shop.html', context)
 
-    context['product_form'] = ProductForm()
-    context['offer_form'] = OfferForm()
-
     return render(request, 'main/shop.html', context)
+
+
+# class NewsDetailView(DetailView):
+#     model = Product
+#     template_name = 'news/details_view.html'
+#     context_object_name = 'article'
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    template_name = 'main/update.html'
+    form_class = ProductForm
+
 
 def account(request):
 
     favorites = Favorite.objects.filter(user=request.user).select_related('product')
-    products = Product.objects.order_by('-id').prefetch_related('offer_set')
+    products = Product.objects.order_by('-id').prefetch_related('offers').filter(user=request.user)
     paginator = Paginator(products, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
@@ -149,19 +158,21 @@ def account(request):
                 offer.save()
                 return redirect('account')
 
-            return render(request, 'main/account.html',{'offer_form': offer_form, 'page': page, 'favorites': favorites})
+            return render(request, 'main/account.html', {'offer_form': offer_form, 'page': page, 'favorites': favorites, 'products': products})
 
     context = {
         'offer_form': OfferForm(),
         'page': page,
-        'favorites': favorites
+        'favorites': favorites,
+        'products': products
     }
 
     return render(request, 'main/account.html', context)
 
 
 def news(request, news_id):
-    news = get_object_or_404(News.objects.prefetch_related('comment_set'), id=news_id)
+    news = get_object_or_404(
+        News.objects.prefetch_related('comments'), id=news_id)
 
     context = {
         'news': news,
@@ -188,7 +199,8 @@ def news(request, news_id):
 
 
 def product(request, product_id):
-    product = get_object_or_404(Product.objects.prefetch_related('offer_set'), id=product_id)
+    product = get_object_or_404(
+        Product.objects.prefetch_related('offers'), id=product_id)
 
     context = {
         'product': product,
@@ -212,7 +224,6 @@ def product(request, product_id):
             return render(request, 'main/product.html', context)
 
     return render(request, 'main/product.html', context)
-
 
 
 def about(request):
@@ -247,15 +258,16 @@ def about(request):
 
 def signin(request):
     if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
+        form = SigninForm(request, data=request.POST)
         if form.is_valid():
             login(request, form.get_user())
-            messages.success(request, f'Вы успешно вошли в свой аккаунт, {form.data["username"]} !')
+            messages.success(
+                request, f'Вы успешно вошли в свой аккаунт, {form.data["username"]} !')
             return redirect('home')
         else:
             return render(request, 'main/login.html', {'form': form})
 
-    form = AuthenticationForm()
+    form = SigninForm()
     context = {'form': form}
 
     return render(request, 'main/login.html', context)
@@ -263,18 +275,18 @@ def signin(request):
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = AccountCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, f'Вы успешно вошли в аккакнт,{form.data["username"]}!')
+            messages.success(
+                request, f'Вы успешно вошли в аккакнт,{form.data["username"]}!')
             return redirect('login')
         return render(request, 'main/register.html', {'form': form})
-    form = UserCreationForm()
+    form = AccountCreationForm()
     context = {
         'form': form,
     }
     return render(request, 'main/register.html', context)
-
 
 
 def note(request):
@@ -286,7 +298,7 @@ def signout(request):
     return redirect('home')
 
 
-def help(request):
+def help_view(request):
     return render(request, 'main/help.html')
 
 
@@ -297,12 +309,43 @@ def favorite(request, product_id):
     Favorite.objects.get_or_create(product=product, user=user)
     return redirect('account')
 
+User = get_user_model()
 
+def chat(request, username):
+    sender = request.user
+    recipient = get_object_or_404(User, username=username)
+    messages = Message.objects.filter(Q(sender=sender, recipient=recipient) | Q(sender=recipient, recipient=sender)
+                                      ).order_by('created_at')
+    form = MessageForm(request.POST)
 
+    if request.method == 'POST':
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.sender = sender
+            message.recipient = recipient
+            message.save()
+            return redirect('chat', username=username)
 
+    context = {
+        'recipient': recipient,
+        'sender': sender,
+        # can not be named messages, because of django.messages rendering in base.html
+        'chat_messages': messages,
+        'form': form,
+    }
 
+    return render(request, 'main/chat.html', context)
 
+def chats(request: HttpRequest):
+    users = User.objects.filter(
+        Q(sent_messages__recipient=request.user) | 
+        Q(received_messages__sender=request.user)
+    ).distinct()
 
+    context = {
+        'users': users
+    }
 
+    return render(request, 'main/chats.html', context)
 
 

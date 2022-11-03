@@ -1,0 +1,12 @@
+{% extends 'main/base.html' %}
+
+{% block title %} главная {% endblock %} 
+{% block content %} 
+<h1>Твои чаты</h1>
+    {% for user in users %}
+        <a href="{% url 'chat' user.username %}" class="lead my-3 px-2 link-dark text-decoration-none">{{user.username}}</a>
+    {% endfor %}
+{% endblock %}
+
+{% block content2 %}
+{% endblock %}
