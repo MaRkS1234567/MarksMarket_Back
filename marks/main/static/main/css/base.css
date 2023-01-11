@@ -1,4 +1,3 @@
-
 .btn-reset {
   background: none;
   border: none;
@@ -107,4 +106,67 @@ nav a:hover {
 
 footer {
   background: white;
+}
+
+.update {
+  color: white;
+  background: rgb(66, 138, 21);
+  padding: 5px;
+  text-decoration: none;
+  min-height: 150px;
+  padding-top: 20px;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  text-decoration: none;
+  transition: all .6s ease;
+}
+
+
+.update:hover {
+  background: rgb(3, 103, 0);
+  color: rgb(180, 180, 180);
+}
+
+.update2 {
+  text-align: center;
+  color: white;
+  height: 34px;
+  width: 150px;
+  background: rgb(158, 35, 35);
+  padding: 5px;
+  text-decoration: none;
+
+}
+
+.update2:hover {
+  background: rgb(126, 0, 0);
+  color: rgb(180, 180, 180);
+}
+
+.myproduct {
+  /* top: 35px; */
+}
+
+.yes {
+  background: rgb(196, 29, 29);
+  border: rgb(196, 29, 29);
+}
+
+.no {
+  background: rgb(41, 103, 0);
+  border: rgb(41, 103, 0);
+  margin: auto;
+}
+
+.yes_form {
+  margin-right: 5px;
+  margin: auto;
+}
+
+.account {
+  transition: all .6s ease;
+}
+
+.account:hover {
+  transform: scale(1.06);
 }

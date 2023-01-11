@@ -1,0 +1,14 @@
+{% extends 'main/base.html' %} 
+
+{% block title %}Удаление брони{% endblock %}
+
+{% block content %}
+        <h3 class="display-7 fw-normal text-center mb-3">Вы точно хотите удалить ваш товар?</h3>
+        <div class="d-flex">
+            <form method="post" class="yes_form">
+                {% csrf_token %}
+                <button class="btn btn-secondary yes" type="submit">Да</button>
+                <a href="{% url 'account' %}" class="btn btn-secondary no">Нет</a>
+            </form>
+        </div>
+{% endblock %}

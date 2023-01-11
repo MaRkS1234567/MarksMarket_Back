@@ -16,5 +16,6 @@ urlpatterns = [
     path('favorite/<int:product_id>', views.favorite, name='favorite'),
     path('chats', views.chats, name='chats'),
     path('chat/<str:username>', views.chat, name='chat'), 
-    path('product/<int:pk>/update', views.ProductUpdateView.as_view(), name='product-update')
+    path('product/<int:pk>/update', views.ProductUpdateView.as_view(), name='product-update'),
+    path('product/<int:pk>/delete', views.ProductDeleteView.as_view(), name='product-delete')
 ]

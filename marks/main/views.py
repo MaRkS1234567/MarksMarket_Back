@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.db.models import Avg, Max, Min, Q
 from django.core.paginator import Paginator
 from django.http import Http404, HttpRequest, HttpResponse
-from django.views.generic import UpdateView, DetailView
+from django.views.generic import UpdateView, DeleteView
 
 
 from .models import Review, News, Product, Favorite, Message
@@ -133,6 +133,12 @@ class ProductUpdateView(UpdateView):
     model = Product
     template_name = 'main/update.html'
     form_class = ProductForm
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    success_url = '/account'
+    template_name = 'main/delete.html'
 
 
 def account(request):

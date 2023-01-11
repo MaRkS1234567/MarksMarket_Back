@@ -1,4 +1,5 @@
 {% extends 'main/base.html' %}
+{% load socialaccount %}
 
 {% block title %}
 Регистрация
@@ -18,6 +19,7 @@
             {{ form.error }}
             <button type="submit" class="btn btn-secondary me-2 mb-2">Зарегистрироваться</button>
         </form><br>
+        <a class="centres date" href="{% provider_login_url 'google' %}">Login With Google</a>
     </div>
 {% endblock %}
 

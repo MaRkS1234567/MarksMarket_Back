@@ -5,18 +5,30 @@ Update
 {% endblock %}
 
 {% block content %}
+  <h1 id="h1" class="display-4 fw-normal text-center">Редактирование</h1><br>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {% for field in favorite.product_form %}
-        <div>
-            <p1 class="fs-5 text-muted">{{ field }}</p1>
-            {% if field.help_text %}
-              <p class="fs-5 text-muted">{{ field.help_text }}</p>
-            {% endif %}
-            {{ field.errors }}
-        </div>
-      {% endfor %}
-        <h4 class="display-7 fw-normal my-4">*пожалуйста прикрепляйте картинку в квадратном формате.</h4>
-        <button type="submit" class="btn btn-secondary my-2 mb-2" name="form_type" value="product_form">Добавить</button>
+      <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+        <label for="id_fullname"class="display-7 fw-normal my-4 ">Введите наименование товара:</label>
+        <p id="name">{{ form.name }}</p>
+        
+        <label for="id_pnumber" class="display-7 fw-normal my-4 ">Введите описание товара:</label>
+        <p id="description">{{ form.description }}</p>
+
+        <label for="startsdate" class="display-7 fw-normal my-4 ">Введите цену товара:</label>
+        <p id="price">{{ form.price }}</p>
+
+        <label for="finishdate" class="display-7 fw-normal my-4 ">Прикрепите картинку:</label>
+        <p id="image">{{ form.image }}</p>
+
+        
+        {{ error }}
+        <h4 class="fs-5 text-muted mb-3">* пожалуйста прикрепляйте картинку в квадратном формате.</h4>
+
+        <button class="btn btn-secondary " type="submit">Обновить</button>
+        <a href="{% url 'product-delete' product.id %}" class="btn btn-secondary aright">Удалить продукт</a>
+      </div>
+
+        <!-- <button type="submit" class="btn btn-secondary my-2 mb-2" name="form_type" value="product_form">Добавить</button> -->
     </form>
 {% endblock %}
