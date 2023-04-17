@@ -1,12 +1,10 @@
-{% extends 'main/base.html' %}
+{% extends 'main/base.html' %} 
 
-{% block title %}
-Наш магазин
-{% endblock %}
+{% block title %}Магазин{% endblock %}
 
 {% block content %}
-    <h1 class="display-4 fw-normal text-center">Наш магазин</h1><br>
-    <form  class="d-flex mb-2">
+    <h1 class="display-4 fw-normal text-center mt-4">Наш магазин</h1><br>
+    <form  class="d-flex mb-3">
         <input class="form-control"  name="q" type="search" placeholder="Поиск"/>
         <input class="form-control" name="min" style="margin-left: 1rem;" placeholder="от {{min_price}} "type="text">
         <input class="form-control" name="max" style="margin-left: 1rem;" placeholder=" до {{max_price}}"type="text">
@@ -16,79 +14,28 @@
 
 {% block content2 %}
     {% if page %}
-        {% for product in page %}
+        {% for yield in page %}
             <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
-                <h1>{{ product.name }}</h1>
-                <h4 class="fs-5 text-muted">{{ product.description }}</h4>
-                <h4>{{ product.price }}</h4>
-                <img src="{{ product.image.url }}" width="300" height="300"/><br><br>
-                <h4>{{after.id}}</h4>
-                {% comment %} {% if product.offers %}
-                    <ul><br><br>
-                    {% for offer in product.offers.all %}
-                        <li class="fs-5 text-muted">{{ offer.user }} предлагает {{ offer.price }}</li>
-                    {% endfor %}
-                    </ul>
-                    <br>
-                {% else %}
-                    <br><h4 class="fs-5 text-muted">Офферов к этому продукту нет(</h4><br>
-                {% endif %} {% endcomment %}
-                {% if user.is_authenticated %}
-                {% comment %} <div class="ul {list-style-type: none;} ul > li {display: inline-block;margin: 0 5px;} header{display: flex;align-items: center;justify-content: space-between;}"> {% endcomment %}
-                <h4>Предложите свою цену:</h4><br>
-                    <form method="post" enctype="multipart/form-data" class="d-flex">
+                <h1>{{ yield.name }}</h1>
+                <h4 class="fs-5 text-muted">{{ yield.description }}</h4>
+                <h4>{{ yield.price }}</h4>
+                <img src="{{ yield.image.url }}" width="300" height="300"/><br>
+                <form method="post" action="{% url 'favorite_for_yields' yield.id %}">
                     {% csrf_token %}
-                    {% for field2 in offer_form %}
-                          <p class="fs-5 text-muted mb-2 d-flex">{{ field2 }}</p>
-                          {% if field2.help_text %}
-                            <p class="fs-5 text-muted">{{ field2.help_text }}</p>
-                          {% endif %}
-                          {{ field2.errors }}
-                          <input type="hidden" name="product" value="{{ product.id }}" />
-                          <button type="submit" class="btn btn-outline-success  mb-2" name="form_type" value="offer_form" style="margin-left: 0.5rem;">Добавить offer</button>
-                    {% endfor %} 
-                    </form>
-                    <a href="{% url 'chat' user.username %}" class="btn btn-secondary me-2 mb-2">Написать продавцу</a>
-                    <form method="post" action="{% url 'favorite' product.id %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-secondary me-2 mb-2">В избранное</button>
-                    </form>
-                    {% else %}
-                    <p1 class="fs-5 text-muted">Вы не вошли в аккаунт</p1><br><br>
-                    <a href="register" class="btn btn-secondary me-2 mb-2">Зарегестрируйся, и оставь свой оффер</a>
-                {% endif %}
+                    <button type="submit" class="pinkbutton likebutton">Добавить в избранное</button>
+                </form>
             </div>
         {% endfor %}
                 {% if page.has_previous %}
-                <a href="?page=1" class="btn btn-secondary my-2 mb-2">Первая страница</a>
-                <a href="?page={{ page.previous_page_number }}" class="btn btn-secondary my-2 mb-2">Предыдущяя</a>
+                <a href="?page=1" class="pinkbutton my-2 mb-2">Первая страница</a>
+                <a href="?page={{ page.previous_page_number }}" class="pinkbutton my-2 mb-2">Предыдущяя</a>
             {% endif %}
             {% if page.has_next %}
-                <a href="?page={{ page.next_page_number }}" class="btn btn-secondary my-2 mb-2">Следующая</a>
-                <a href="?page={{ page.paginator.num_pages }}" class="btn btn-secondary my-2 mb-2">Поледняя страница</a>
+                <a href="?page={{ page.next_page_number }}" class="pinkbutton my-2 mb-2">Следующая</a>
+                <a href="?page={{ page.paginator.num_pages }}" class="pinkbutton my-2 mb-2">Поледняя страница</a>
             {% endif %}
                 <span class="fs-5 text-muted">Страница {{ page.number }} из {{ page.paginator.num_pages }}</span><br><br>
     {% else %}
         <p class="fs-5 text-muted">Да, много сегодня отзывов</p>
     {% endif %}
-    {% if user.is_authenticated %}
-    <form method="post" enctype="multipart/form-data" class="date2">
-            <h5 class="display-6 fw-normal">Разместите свой товар:</><br><br>
-            {% csrf_token %}
-            <p class="fs-5 text-muted">Введите наименование товара:</p>
-            {{ product_form.name }}<br>
-            <p class="fs-5 text-muted">Введите описание товара:</p>
-            {{ product_form.description }}<br>
-            <p class="fs-5 text-muted">Введите цену товара:</p>
-            {{ product_form.price }}<br>
-            <p class="fs-5 text-muted">Прикрепите картинку:</p>
-            <p>{{ product_form.image }}</p>
-            <p class="fs-5 text-muted">*пожалуйста прикрепляйте картинку в квадратном формате</p>
-            <button type="submit" class="btn btn-secondary my-2 mb-2" name="form_type" value="product_form">Добавить</button>
-        </form>
-    {% else %}
-        <p1 class="fs-5 text-muted">Вы не вошли в аккаунт</p1><br><br>
-        <a href="register" class="btn btn-secondary me-2 mb-2">Зарегестрируйся, и оставь свой отзыв</a>
-    {% endif %}
-    </div>
 {% endblock %}

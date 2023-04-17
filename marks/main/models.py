@@ -54,8 +54,21 @@ class Product(models.Model):
     def get_absolute_url(self):
         return f'/account/'
 
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return self.name
+    
+
+class Yield(models.Model):
+    name = models.CharField(max_length=15)
+    description = models.TextField()
+    price = models.PositiveIntegerField()
+    image = models.ImageField(upload_to='products/')
+
+    def get_absolute_url(self):
+        return f'/account/'
+
+    def __str__(self):
+        return self.name
 
 
 class Offer(models.Model):
@@ -68,12 +81,31 @@ class Offer(models.Model):
 
 
 class Favorite(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
+    yields = models.ForeignKey(Yield, on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return str(self.product)
 
+class ReviewOfUser(models.Model):
+    task = models.TextField('Reviews')
+    rating = models.PositiveIntegerField()
+    profile_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='profile_user', on_delete=models.CASCADE)
+    comment_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='comment_user', on_delete=models.CASCADE)
+
+
+    def __str__(self):
+        return str(self.profile_user)
+
+    def rating_range(self):
+        return range(self.rating)
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                name='valid_rating_range',
+                check=models.Q(rating__gt=0) & models.Q(rating__lt=6)
+            ),
+        ]
 
 class Message(models.Model):
     text = models.TextField()
@@ -81,6 +113,10 @@ class Message(models.Model):
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='sent_messages', on_delete=models.CASCADE)
     recipient = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='received_messages', on_delete=models.CASCADE)
     
+    def datepublished(self):
+            return self.created_at.strftime('%T')
+
+
     class Meta:
         constraints = [
             models.CheckConstraint(

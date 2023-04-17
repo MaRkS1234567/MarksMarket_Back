@@ -10,8 +10,8 @@ from django.http import Http404, HttpRequest, HttpResponse
 from django.views.generic import UpdateView, DeleteView
 
 
-from .models import Review, News, Product, Favorite, Message
-from .forms import ReviewForm, ProductForm, OfferForm, CommentForm, MessageForm, AccountCreationForm, SigninForm
+from .models import Review, News, Product, Favorite, Message, ReviewOfUser, Yield
+from .forms import ReviewForm, ProductForm, OfferForm, CommentForm, MessageForm, AccountCreationForm, SigninForm, ReviewProfileForm
 
 
 def index(request):
@@ -44,7 +44,7 @@ def index(request):
     return render(request, 'main/index.html', context)
 
 
-def shop(request):
+def trade(request):
     min_price = Product.objects.aggregate(Min("price"))['price__min']
     max_price = Product.objects.aggregate(Max("price"))['price__max']
 
@@ -87,7 +87,7 @@ def shop(request):
                 offer.product = Product.objects.get(id=int(product_id))
                 offer.user = request.user
                 offer.save()
-                return redirect('shop')
+                return redirect('trade')
                 # error = ''
                 # if product_id is None:
                 #     error = 'No product_id'
@@ -106,7 +106,7 @@ def shop(request):
                 # if not error:
                 #     offer.product = product
             context['offer_form'] = offer_form
-            return render(request, 'main/shop.html', context)
+            return render(request, 'main/trade.html', context)
 
         elif form_type == 'product_form':
             product_form = ProductForm(request.POST, request.FILES)
@@ -115,12 +115,12 @@ def shop(request):
                 product = product_form.save(commit=False)
                 product.user = request.user
                 product.save()
-                return redirect('shop')
+                return redirect('trade')
 
             context['product_form'] = product_form
-            return render(request, 'main/shop.html', context)
+            return render(request, 'main/trade.html', context)
 
-    return render(request, 'main/shop.html', context)
+    return render(request, 'main/trade.html', context)
 
 
 # class NewsDetailView(DetailView):
@@ -143,7 +143,13 @@ class ProductDeleteView(DeleteView):
 
 def account(request):
 
+    profile_ = ReviewOfUser.objects.order_by('-id').filter(profile_user = request.user)
+    average = round(ReviewOfUser.objects.aggregate(Avg('rating'))['rating__avg'])
+    paginator_ = Paginator(profile_, 5)
+    page_number_ = request.GET.get('page_')
+    page_ = paginator_.get_page(page_number_)
     favorites = Favorite.objects.filter(user=request.user).select_related('product')
+    favorites_for_yield = Favorite.objects.filter(user=request.user).select_related('yields')
     products = Product.objects.order_by('-id').prefetch_related('offers').filter(user=request.user)
     paginator = Paginator(products, 6)
     page_number = request.GET.get('page')
@@ -168,8 +174,12 @@ def account(request):
 
     context = {
         'offer_form': OfferForm(),
+        'profile_': profile_,
+        'page_': page_,
+        'average': average,
         'page': page,
         'favorites': favorites,
+        'favorites_for_yield': favorites_for_yield,
         'products': products
     }
 
@@ -230,6 +240,15 @@ def product(request, product_id):
             return render(request, 'main/product.html', context)
 
     return render(request, 'main/product.html', context)
+
+
+def yields(request, yield_id):
+    yields = get_object_or_404(Yield, id=yield_id)
+
+    context = {
+        'yields': yields,
+    }
+    return render(request, 'main/yield.html', context)
 
 
 def about(request):
@@ -315,9 +334,23 @@ def favorite(request, product_id):
     Favorite.objects.get_or_create(product=product, user=user)
     return redirect('account')
 
+
+def favorite_for_yields(request, yield_id):
+    yields = get_object_or_404(Yield, id=yield_id)
+    user = request.user
+
+    Favorite.objects.get_or_create(yields=yields, user=user)
+    return redirect('account')
+
+
 User = get_user_model()
 
-def chat(request, username):
+def chat(request: HttpRequest, username):
+    users = User.objects.filter(
+        Q(sent_messages__recipient=request.user) | 
+        Q(received_messages__sender=request.user)
+    ).distinct()
+     
     sender = request.user
     recipient = get_object_or_404(User, username=username)
     messages = Message.objects.filter(Q(sender=sender, recipient=recipient) | Q(sender=recipient, recipient=sender)
@@ -333,9 +366,9 @@ def chat(request, username):
             return redirect('chat', username=username)
 
     context = {
+        'users': users,
         'recipient': recipient,
         'sender': sender,
-        # can not be named messages, because of django.messages rendering in base.html
         'chat_messages': messages,
         'form': form,
     }
@@ -354,4 +387,76 @@ def chats(request: HttpRequest):
 
     return render(request, 'main/chats.html', context)
 
+def shop(request):
+    min_price = Yield.objects.aggregate(Min("price"))['price__min']
+    max_price = Yield.objects.aggregate(Max("price"))['price__max']
+
+    query = request.GET.get("q")
+    min_ = request.GET.get("min")
+    max_ = request.GET.get("max")
+
+    yields = Yield.objects.order_by('-id')
+
+    yield_id = request.POST.get('yields')   
+
+
+    if query is not None:
+        yields = yields.filter(name__icontains=query)
+
+    if min_ is not None and min_.isdigit():
+        yields = yields.filter(price__gte=min_)
+
+    if max_ is not None and max_.isdigit():
+        yields = yields.filter(price__lte=max_)
+
+    paginator = Paginator(yields, 6)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+
+    context = {
+        'min_price': min_price,
+        'max_price': max_price,
+        'page': page,
+    }
+
+    return render(request, 'main/shop.html', context)
+
+
+def profile(request, username):
+    profile_user = get_object_or_404(User, username=username)
+    profile_ = ReviewOfUser.objects.order_by('-id').filter(profile_user = profile_user)
+    paginator = Paginator(profile_, 5)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    products = Product.objects.order_by('-id').prefetch_related('offers').filter(user = profile_user)
+    paginator_ = Paginator(products, 5)
+    page_number_ = request.GET.get('page_')
+    page_ = paginator_.get_page(page_number_)
+    average = round(ReviewOfUser.objects.aggregate(Avg('rating'))['rating__avg'])
+    user_ = get_object_or_404(User, username=username)
+
+
+    form = ReviewProfileForm(request.POST)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.comment_user = request.user
+            profile.profile_user = profile_user
+            profile.save()
+            return redirect('profile', username=username)
+        else:
+            return render(request, 'main/profile.html', {'profile_': profile_ , 'form': form, 'page': page,'average': average,'products': products,'user_': user_,'porfiles': profiles})
+
+    context = {
+        'profile_': profile_ ,
+        'form': form,
+        'page': page,
+        'page_': page_,
+        'average': average,
+        'products': products,
+        'user_': user_,
+    }
+
+    return render(request, 'main/profile.html', context)
 

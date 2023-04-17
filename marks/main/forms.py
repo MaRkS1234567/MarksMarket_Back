@@ -1,4 +1,4 @@
-from .models import Message, Review, Product, News, Offer, Comment
+from .models import Message, Review, Product, News, Offer, Comment, ReviewOfUser, Yield
 from django.forms import ModelForm, Textarea, Select, TextInput, FileInput
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
@@ -12,6 +12,19 @@ class ReviewForm(ModelForm):
                 'class': 'form-control',
             }),
             "stars": Select(choices=[(str(star), star) for star in range(1, 6)], attrs={
+                'class': 'form-control'
+            }),
+        }
+
+class ReviewProfileForm(ModelForm):
+    class Meta:
+        model = ReviewOfUser
+        fields = ["task", "rating"]
+        widgets = {
+            "task": Textarea(attrs={
+                'class': 'form-control',
+            }),
+            "rating": Select(choices=[(str(star), star) for star in range(1, 6)], attrs={
                 'class': 'form-control'
             }),
         }
@@ -37,6 +50,23 @@ class ProductForm(ModelForm):
         }
 
 
+# class YieldForm(ModelForm):
+#     class Meta:
+#         model = Yield
+#         fields = ["description", "price", "image"]
+#         widgets = {
+#             "description": Textarea(attrs={
+#                 'class': 'form-control',
+#             }),
+#             "price": TextInput(attrs={
+#                 'class': 'form-control',
+#             }),
+#             "image": FileInput(attrs={
+#                 'class': 'form-control',
+#             }),
+#         }
+
+
 class OfferForm(ModelForm):
     class Meta:
         model = Offer
@@ -44,7 +74,7 @@ class OfferForm(ModelForm):
         widgets = {
             "price": TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Введите свой оффер'
+                'placeholder': '   Ваш оффер'
             })
         }
 

@@ -1,31 +1,36 @@
-{% extends 'main/base.html' %}
+{% extends 'main/chats.html' %}
 
 {% block title %} главная {% endblock %} 
 
-{% block content %} 
+{% block content3 %} 
 {% if chat_messages %}
-<div class="messages flex-column">
-<ul>
-  {% for message in chat_messages %}
-  <ol class="{% if request.user == message.sender %}message{% else %}message darker{% endif %}">
-    <p class="mb-0">{{message.text}}</p>
-  </ol>
+<br>
+<a class="pinkbutton me-2" style="margin-left: 40px; padding-left: 13px; padding-right: 13px;" href="{% url 'chats' %}">ᐊ</a>
+<a href="{% url 'profile' recipient.username %}" class="pinkbutton me-2 chatbutton">Профиль продавца</a><br><br>
+<div class="messages flex-column mt-2">
+  {% for message in chat_messages %}  
+  <div class="d-flex">
+      <div class="name_chat text-center">
+        <div class="user_chat">{{ message.sender }}</div>
+        <div class="time_chat">{{ message.datepublished }}</div>
+      </div>
+      <p class="{% if request.user == message.sender %}message-orange{% else %}message-blue{% endif %}">{{message.text}}
+      </p>
+  </div>
   {% endfor %}
-</ul>
-{% else %}
-    <p>Сообщений пока нет:(</p>
-{% endif %}
-
-<form method="post" class="d-flex">
-  {% csrf_token %} {% for field in form %}
-  <p class="fs-5 text-muted mb-2 searchmessage">{{ field }}</p>
-  {% if field.help_text %}
-  <p class="fs-5 text-muted">{{ field.help_text }}</p>
+  {% else %}
+      <p>Сообщений пока нет:(</p>
   {% endif %}
-  <button type="submit" class="submit">▶️</button>
-  {% endfor %}
-</form>
 </div>
+  <form method="post" class="d-flex mb-2" style="margin-top: 10px;">
+    {% csrf_token %} {% for field in form %}
+    <p class="fs-5 text-muted mb-2 searchmessage" style="margin-left: 20px;">{{ field }}</p>
+    {% if field.help_text %}
+    <p class="fs-5 text-muted">{{ field.help_text }}</p>
+    {% endif %}
+    <button type="submit" class="submit">▶️</button>
+    {% endfor %}
+  </form>
 {% endblock %}
 
 {% block content2 %}

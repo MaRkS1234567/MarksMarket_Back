@@ -5,13 +5,13 @@
 {% endblock %}
 
 {% block content %}
-<h1 class="display-4 fw-normal text-center">О нас</h1>
+<h1 class="display-4 fw-normal text-center mt-4">О нас</h1>
 <div class="text-center">
     <p class="fs-5 text-muted">Сдесь вы можете посмотреть наши отзывы и оствить свой! </p>
-    <p1 class ="fs-5 text-muted">Наша средняя оценка   </p1>
-    <p1 class ="fs-5 text-muted">{{ average }}★</p1>
+    <div class="text-center text-white rounded bg-dark" style="margin-bottom: 25px;">
+        <h4 style="padding: 30px; color: white;">Наша средняя оценка  {{ average }}★</h4>
+    </div>
 </div>
-<br>
     {% if page %}
         {% for review in page %}
             <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
@@ -25,12 +25,12 @@
         {% endfor %}
 
             {% if page.has_previous %}
-                <a href="?page=1" class="btn btn-secondary my-2 mb-2">Первая страница</a>
-                <a href="?page={{ page.previous_page_number }}" class="btn btn-secondary my-2 mb-2">Предыдущщяя</a>
+                <a href="?page=1" class="pinkbutton my-2 mb-2">Первая страница</a>
+                <a href="?page={{ page.previous_page_number }}" class="pinkbutton my-2 mb-2">Предыдущщяя</a>
             {% endif %}
             {% if page.has_next %}
-                <a href="?page={{ page.next_page_number }}" class="btn btn-secondary my-2 mb-2">Следующая</a>
-                <a href="?page={{ page.paginator.num_pages }}" class="btn btn-secondary my-2 mb-2">Поледняя страница</a>
+                <a href="?page={{ page.next_page_number }}" class="pinkbutton my-2 mb-2">Следующая</a>
+                <a href="?page={{ page.paginator.num_pages }}" class="pinkbutton my-2 mb-2">Поледняя страница</a>
             {% endif %}
 
             <span class="fs-5 text-muted">Страница {{ page.number }} из {{ page.paginator.num_pages }}</span><br><br>
@@ -39,23 +39,23 @@
     {% endif %}
 
     {% if user.is_authenticated %}
-        <form method="post" class="date2">
+        <form method="post" class="">
             {% csrf_token %}
-            <p1 class="fs-5 text-muted">Твой отзыв:</p1>
+            <h2 class="display-6 fw-normal text-center">Твой отзыв:</h2><br>
             {% for field in form %}
               <div>
-                  {{ field }}<p1 class="fs-5 text-muted"></p1>
+                  {{ field }}<p1 class="fs-5 text-muted"></p1><br>
                   {% if field.help_text %}
                     <p class="fs-5 text-muted">{{ field.help_text }}</p>
                   {% endif %}
                   {{ field.errors }}
               </div>
             {% endfor %}
-            <button type="submit" class="btn btn-secondary me-2 mb-2">Добавить</button>
+            <button type="submit" class="pinkbutton me-2 mb-2">Добавить</button>
         </form>
     {% else %}
         <p1 class="fs-5 text-muted">Вы не вошли в аккаунт</p1><br><br>
-        <a href="register" class="btn btn-secondary me-2 mb-2">Зарегестрируйся, и оставь свой отзыв</a>
+        <a href="register" class="pinkbutton me-2 mb-2">Зарегестрируйся, и оставь свой отзыв</a><br><br>    
     {% endif %}
 {% endblock %}
 

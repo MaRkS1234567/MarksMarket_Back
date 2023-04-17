@@ -1,11 +1,17 @@
 from pyexpat.errors import messages
 from django.contrib import admin
-from .models import Review, Product, News, Offer, Comment, Message
+from .models import Review, Product, News, Offer, Comment, Message, ReviewOfUser, Yield, Favorite
+# from django.contrib.auth import get_user_model
+
+# User = get_user_model()
 
 admin.site.register(Review)
+admin.site.register(ReviewOfUser)
 admin.site.register(Offer)
 admin.site.register(Comment)
 admin.site.register(Message)
+admin.site.register(Yield)
+admin.site.register(Favorite)
 
 
 class OfferInline(admin.TabularInline):
@@ -16,9 +22,18 @@ class CommentInline(admin.TabularInline):
     model = Comment
 
 
+# class ProfileInline(admin.TabularInline):
+#     model = ReviewOfUser
+
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     inlines = [OfferInline]
+
+
+# @admin.(User)
+# class UserAdmin(admin.ModelAdmin):
+#     inlines = [ProfileInline]
 
 
 @admin.register(News)

@@ -2,10 +2,19 @@
 
 {% block title %} главная {% endblock %} 
 {% block content %} 
-<h1>Твои чаты</h1>
-    {% for user in users %}
-        <a href="{% url 'chat' user.username %}" class="lead my-3 px-2 link-dark text-decoration-none">{{user.username}}</a>
-    {% endfor %}
+<div class="d-flex">
+    <div class="listofchats">
+        <h1 class="mt-2">Твои чаты</h1>
+            {% for user in users %}
+            <div class="text-center text-white rounded bg-dark" style="margin-bottom: 25px; margin-right: 70px; padding: 8px;">
+                <a href="{% url 'chat' user.username %}" style="color: white;" class="lead my-3 px-2 link-dark text-decoration-none mb-2 mt-2 messagetag">{{user.username}}</a><br>
+            </div>
+            {% endfor %}
+    </div>
+    <div class="line"></div>
+    <div class="chat">
+        {% block content3 %}{% endblock %}
+    </div>
 {% endblock %}
 
 {% block content2 %}

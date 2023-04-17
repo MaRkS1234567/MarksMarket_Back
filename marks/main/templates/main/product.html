@@ -9,7 +9,7 @@
 
 {% block content2 %}
     {% if user == product.user %}
-        <h1 class="display-4 fw-normal text-center">{{ product.name }}</h1>
+        <h1 class="display-4 fw-normal text-center mt-4">{{ product.name }}</h1>
         <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
             <h4>{{ product.description }}</h4>
             <h4>{{ product.price }}</h4>
@@ -18,7 +18,7 @@
             {% if product.offers %}
                 {% for offer in product.offers.all %}
                     <ul>
-                        <li class="fs-5 text-muted">{{ offer.user }} предлагает {{ offer.price }}</li>
+                        <li class="fs-5 text-muted"><a href="{% url 'chat' offer.user.username %}">{{ offer.user }}</a> предлагает {{ offer.price }}</li>
                     </ul>
                 {% endfor %}
             {% else %}
@@ -26,34 +26,26 @@
             {% endif %} 
         </div>
     {% else %}
-        <h1 class="display-4 fw-normal text-center">{{ product.name }}</h1>
+        <h1 class="display-4 fw-normal text-center mt-4">{{ product.name }}</h1>
         <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
             <h4>{{ product.description }}</h4>
             <h4>{{ product.price }}</h4>
             <img src="{{ product.image.url }}" width="300" height="300" class="mb-5"/>
-            <ul>
-            {% comment %} {% for offer in product.offers.all %}
-                <li class="fs-5 text-muted">{{ offer.user }} предлагает {{ offer.price }}</li>
-            {% endfor %} {% endcomment %}
-            </ul>
             {% if user.is_authenticated %}
-                 <h4>Предложите свою цену:</h4
-                <form method="post" enctype="multipart/form-data" class="d-flex">
-                {% csrf_token %}
-                <div class="d-flex">
-                {% for field2 in offer_form %}
-                    <p class="fs-5 text-muted mb-2 d-flex">{{ field2 }}</p>
-                    {% if field2.help_text %}
-                        <p class="fs-5 text-muted">{{ field2.help_text }}</p>
-                    {% endif %}
-                    {{ field2.errors }}
-                        <input type="hidden" name="product" value="{{ product.id }}" />
-                        <button type="submit" class="btn btn-outline-success  mb-2" name="form_type" value="offer_form" style="margin-left: 1rem;">Добавить offer</button>
-                   
-                {% endfor %} 
-            </div>
-
-                </form>
+                <h4>Предложите свою цену:</h4><br>
+                    <form method="post" style="margin-bottom: 8px;" enctype="multipart/form-data" class="d-flex">
+                    {% csrf_token %}
+                    {% for field2 in offer_form %}
+                          <p class="fs-5 text-muted mb-2 d-flex offer">{{ field2 }}</p>
+                          {% if field2.help_text %}
+                            <p class="fs-5 text-muted">{{ field2.help_text }}</p>
+                          {% endif %}
+                          {{ field2.errors }}
+                          <input type="hidden" name="product" value="{{ product.id }}" />
+                          <button type="submit" class="btn btn-outline-success offerbutton mb-2" name="form_type" value="offer_form" style="margin-left: 0.5rem;">Добавить offer</button>
+                    {% endfor %} 
+                    </form>
+                    <a href="{% url 'profile' product.user.username %}" class="pinkbutton profilebutton">Профиль продавца</a>
             {% endif %}
         </div>
     {% endif %}

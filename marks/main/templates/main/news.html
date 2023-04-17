@@ -36,11 +36,11 @@
                     <div>
                         <input type="hidden" name="news" value="{{ news.id }}" />
                     </div>
-                <button type="submit" class="btn btn-secondary me-4 my-2 mb-2" name="form_type" value="comment_form">Добавить комментарий</button>
+                <button type="submit" class="pinkbutton me-4 my-2 mb-2" name="form_type" value="comment_form">Добавить комментарий</button>
             </form>
             {% else %}
             <h4>Вы не вошли в аккаунт</h4><br>
-            <a href="register" class="btn btn-secondary me-2 mb-2">Зарегестрируйся, и оставь свой комментарий</a>
+            <a href="register" class="pinkbutton me-2 mb-2">Зарегестрируйся, и оставь свой комментарий</a>
         {% endif %}
     </div>
 {% endblock %}

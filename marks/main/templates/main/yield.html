@@ -1,0 +1,17 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+{{ product.name }}
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block content2 %}
+    <h1 class="display-4 fw-normal text-center mt-4">{{ yields.name }}</h1>
+    <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+        <h4>{{ yields.description }}</h4><br>
+        <h4>{{ yields.price }}</h4>
+        <img src="{{ yields.image.url }}" width="300" height="300" class="mb-5"/>
+    </div>
+{% endblock %}

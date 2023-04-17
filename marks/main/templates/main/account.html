@@ -5,40 +5,85 @@
 {% endblock %}
 
 {% block content %}
-    <h1 class="display-4 fw-normal text-center">Ваш аккаунт</h1><br>
+    <h1 class="display-4 fw-normal text-center mt-4">Ваш аккаунт</h1><br>
     <h4 class="display-6 fw-normal text-center">Избранные товары</h4><br>
     {% if favorites %}
         {% for favorite in favorites %}
-        <div class="p-4 p-md-5 mb-4  rounded bg-dark d-flex account">
-            <a class="display-6 text-white fw-normal text-decoration-none" style="padding: 2.75rem 0;" href="{% url 'product' favorite.product.id %}">{{ favorite.product.name }}</a>
-            <img src="{{ favorite.product.image.url }}" width="150" height="150" style="margin-left:auto;" />
-        </div>
+            {% if favorite.product.name %}
+                <div class="p-4 p-md-5 mb-4  rounded bg-dark d-flex">
+                    <a class="display-6 text-white fw-normal text-decoration-none account" style="padding: 2.75rem 0;" href="{% url 'product' favorite.product.id %}">{{ favorite.product.name }}</a>
+                    <img src="{{ favorite.product.image.url }}" width="150" height="150" style="margin-left:auto;" />
+                </div>
+            {% endif %}
+        {% endfor %}
+        {% for favorite in favorites %}
+            {% if favorite.yields.name %}
+                <div class="p-4 p-md-5 mb-4  rounded bg-dark d-flex">
+                    <a class="display-6 text-white fw-normal text-decoration-none account" style="padding: 2.75rem 0;" href="{% url 'yields' favorite.yields.id %}">{{ favorite.yields.name }} </a>
+                    <h5 style="color: white; padding-top: 60px; padding-left: 15px;"> ( товар от нашей платформы ✅ )</h5>
+                    <img src="{{ favorite.yields.image.url }}" width="150" height="150" style="margin-left:auto;" />
+                </div>
+            {% endif %}
         {% endfor %}
     {% else %}
     <div class="text-center">
-        <a href="{% url 'shop' %}" class="btn btn-secondary text-center">Корзина пуста! Скорее за покупками🤠</a>
+        <a href="{% url 'trade' %}" class="pinkbutton text-center">Корзина пуста! Скорее за покупками🤠</a>
     </div>
     {% endif %}
+
     <h4 class="display-6 fw-normal text-center my-3">Мои товары</h4><br>
     
     {% if products %}
     
     {% for product in products %}
-    <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark d-flex account">
-        <a class="display-6 fw-normal text-white text-decoration-none" style="padding: 2.75rem 0;" href="{% url 'product' product.id %}">{{ product.name }}</a>  
+    <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark d-flex">
+        <a class="display-6 fw-normal text-white text-decoration-none account" style="padding: 2.75rem 0;" href="{% url 'product' product.id %}">{{ product.name }}</a>  
             <img src="{{ product.image.url }}" width="150" height="150" style="margin-left:auto;" />
             <a href="{% url 'product-update' product.id %}" class="update">Редактировать</a>
     </div>
     {% endfor %}
     {% else %}
     <div class="text-center">
-    <a href="{% url 'shop' %}" class="btn btn-secondary">Скорее выложете свой первый товар!</a>
+    <a href="{% url 'trade' %}" class="pinkbutton">Скорее выложете свой первый товар!</a>
     </div>
-        {% endif %}
+    {% endif %}
+    
+    <h4 class="display-6 fw-normal text-center">Твои отзывы</h4><br>
+
+    <div class="text-center text-white rounded bg-dark" style="margin-bottom: 25px;">
+        <h4 style="padding: 30px; color: white;">Твоя репутация  {{ average }}★</h4>
+    </div>
+    {% if page_ %}
+        {% for profile_ in page_ %}
+            <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+                <h3>{{ profile_.comment_user }}:</h3>
+                <h4 class="fs-5 text-muted">{{ profile_.task }}</h4>
+                <h3>Оценка:</h3>
+                <h4 class="fs-5 text-muted">
+                    {% for _ in profile_.rating_range %}★{% endfor %}
+                </h4>
+            </div>
+        {% endfor %}
+
+            {% if page_.has_previous %}
+                <a href="?page=1" class="pinkbutton my-2 mb-2">Первая страница</a>
+                <a href="?page={{ page.previous_page_number }}" class="pinkbutton my-2 mb-2">Предыдущщяя</a>
+            {% endif %}
+            {% if page_.has_next %}
+                <a href="?page={{ page.next_page_number }}" class="pinkbutton my-2 mb-2">Следующая</a>
+                <a href="?page={{ page.paginator.num_pages }}" class="pinkbutton my-2 mb-2">Поледняя страница</a>
+            {% endif %}
+
+            <span class="fs-5 text-muted">Страница {{ page_.number }} из {{ page_.paginator.num_pages }}</span><br><br>
+    {% else %}
+    <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+        <h4>У тебя отсутствуют отзывы 👤</h4>
+    </div>
+    {% endif %}
         <form action="{% url 'logout' %}" method="POST">
             {% csrf_token %}
             <div class="text-center my-2">
-                <button type="submit" class="btn btn-secondary">Выйти из аккаунта</button>
+                <button type="submit" class="pinkbutton">Выйти из аккаунта</button>
             </div>
         </form>
 {% endblock %}

@@ -7,8 +7,8 @@
         <div class="d-flex">
             <form method="post" class="yes_form">
                 {% csrf_token %}
-                <button class="btn btn-secondary yes" type="submit">Да</button>
-                <a href="{% url 'account' %}" class="btn btn-secondary no">Нет</a>
+                <button class="redbutton" type="submit">Да</button>
+                <a href="{% url 'account' %}" style="padding: 10px;" class="greenbutton">Нет</a>
             </form>
         </div>
 {% endblock %}

@@ -25,10 +25,10 @@ Update
         {{ error }}
         <h4 class="fs-5 text-muted mb-3">* пожалуйста прикрепляйте картинку в квадратном формате.</h4>
 
-        <button class="btn btn-secondary " type="submit">Обновить</button>
-        <a href="{% url 'product-delete' product.id %}" class="btn btn-secondary aright">Удалить продукт</a>
+        <button class="greenbutton" type="submit">Обновить</button>
+        <a href="{% url 'product-delete' product.id %}" class="redbutton">Удалить продукт</a>
       </div>
 
-        <!-- <button type="submit" class="btn btn-secondary my-2 mb-2" name="form_type" value="product_form">Добавить</button> -->
+        <!-- <button type="submit" class="pinkbutton my-2 mb-2" name="form_type" value="product_form">Добавить</button> -->
     </form>
 {% endblock %}

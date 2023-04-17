@@ -1,0 +1,90 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+примечание
+{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h2 class="display-4 fw-normal text-center mt-4 mb-4">{{ user_.username }}</h2>  
+</div>
+<div class="p-4 p-md-5 mb-4 text-white rounded bg-dark d-flex">
+    <h4 class="lefto text-white fw-normal text-decoration-none">Репутация пользователя: {{ average }}★</h4>
+    <a href="{% url 'chat' user_.username %}" class="righto text-white fw-normal text-decoration-none account">Написать продавцу</a>
+</div>
+    <h4 class="display-6 fw-normal text-center">Товары продовца</h4><br>
+    {% if page_ %}
+        {% for product in page_ %}
+        <div class="p-4 p-md-5 mb-4  rounded bg-dark d-flex">
+            <a class="display-6 text-white fw-normal text-decoration-none account" style="padding: 2.75rem 0;" href="{% url 'product' product.id %}">{{ product.name }}</a>
+            <img src="{{ product.image.url }}" width="150" height="150" style="margin-left:auto;" />
+        </div>
+        {% endfor %}
+        {% if page_.has_previous %}
+            <a href="?page=1" class="pinkbutton my-2 mb-2">Первая страница</a>
+            <a href="?page={{ page.previous_page_number }}" class="pinkbutton my-2 mb-2">Предыдущщяя</a>
+        {% endif %}
+        {% if page_.has_next %}
+            <a href="?page={{ page.next_page_number }}" class="pinkbutton my-2 mb-2">Следующая</a>
+            <a href="?page={{ page.paginator.num_pages }}" class="pinkbutton my-2 mb-2">Поледняя страница</a>
+        {% endif %}
+
+    <span class="fs-5 text-muted">Страница {{ page_.number }} из {{ page_.paginator.num_pages }}</span><br><br>
+    {% else %}
+    <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+        <h4>Пользователь ещё не выкладывал продукты 👟</h4>
+    </div>
+    {% endif %}
+    <br>
+    <h4 class="display-6 fw-normal text-center">Отзовы о продовце</h4><br>
+        {% if page %}
+            {% for profile_ in page %}
+                <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+                    <h3>{{ profile_.comment_user }}:</h3>
+                    <h4 class="fs-5 text-muted">{{ profile_.task }}</h4>
+                    <h3>Оценка:</h3>
+                    <h4 class="fs-5 text-muted">
+                        {% with ''|center:profile_.rating as range %}
+                        {% for _ in range %}
+                            {{ '★' }}
+                        {% endfor %}
+                        {% endwith %}
+                    </h4>
+                </div>
+            {% endfor %}
+    
+                {% if page.has_previous %}
+                    <a href="?page=1" class="pinkbutton my-2 mb-2">Первая страница</a>
+                    <a href="?page={{ page.previous_page_number }}" class="pinkbutton my-2 mb-2">Предыдущщяя</a>
+                {% endif %}
+                {% if page.has_next %}
+                    <a href="?page={{ page.next_page_number }}" class="pinkbutton my-2 mb-2">Следующая</a>
+                    <a href="?page={{ page.paginator.num_pages }}" class="pinkbutton my-2 mb-2">Поледняя страница</a>
+                {% endif %}
+    
+                <span class="fs-5 text-muted">Страница {{ page.number }} из {{ page.paginator.num_pages }}</span><br><br>
+        {% else %}
+        <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+            <h4>У пользователя отсутствуют отзывы 👤</h4>
+        </div>
+        {% endif %}
+    
+        {% if user.is_authenticated %}
+            <form method="post" class="">
+                {% csrf_token %}
+                <h2 class="display-6 fw-normal text-center">Твой отзыв:</h2><br>
+                {% for field in form %}
+                  <div>
+                      {{ field }}<p1 class="fs-5 text-muted"></p1><br>
+                  </div>
+                {% endfor %}
+                <button type="submit" class="pinkbutton me-2 mb-2">Добавить</button>
+            </form>
+        {% else %}
+            <p1 class="fs-5 text-muted">Вы не вошли в аккаунт</p1><br><br>
+            <a href="register" class="pinkbutton me-2 mb-2">Зарегестрируйся, и оставь свой отзыв</a>
+        {% endif %}
+{% endblock %}
+{% block content2 %}
+
+{% endblock %}
