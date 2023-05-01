@@ -19,19 +19,19 @@
                   <a class="lead my-3 px-2 link-dark text-decoration-none {% if request.resolver_match.url_name == 'home' %}nav-link-active{% endif %}" href="{% url 'shop' %}">Магазин</a>
                         <a class="lead my-3 px-2 link-dark text-decoration-none {% if request.resolver_match.url_name == 'trade' %}nav-link-active{% endif %}" href="{% url 'trade' %}">Рынок</a>
                         <a class="lead my-3 px-2 link-dark text-decoration-none {% if request.resolver_match.url_name == 'about' %}nav-link-active{% endif %}" href="{% url 'about' %}">Отзывы</a>
-                  {% if user.is_authenticated %}
-                    <a class="lead my-3 px-2 link-dark text-decoration-none {% if request.resolver_match.url_name == 'account' %}nav-link-active{% endif %}" href="{% url 'account' %}">{{ user.username }}</a>
-                    <a class="lead my-3 px-2 link-dark text-decoration-none {% if request.resolver_match.url_name == 'chats' %}nav-link-active{% endif %}" href="{% url 'chats' %}">Чаты</a>
-                  {% else %}
-                    <a class="lead my-3 px-2 link-dark text-decoration-none {% if request.resolver_match.url_name == 'register' %}nav-link-active{% endif %}" href="{% url 'login' %}">Авторизиация</a>
-                  {% endif %}
-                  <a class="lead my-3 px-2 link-dark text-decoration-none {% if request.resolver_match.url_name == 'register' %}nav-link-active{% endif %}" href="{% url 'note' %}">Примечание</a>
+                        <a class="lead my-3 px-2 link-dark text-decoration-none {% if request.resolver_match.url_name == 'register' %}nav-link-active{% endif %}" href="{% url 'note' %}">Примечание</a>
+                        {% if user.is_authenticated %}
+                        <a class="lead my-3 px-2 link-dark text-decoration-none {% if request.resolver_match.url_name == 'chats' %}nav-link-active{% endif %}" href="{% url 'chats' %}">Чаты</a>
+                          <a style="margin-right: 25px;" class="lead link-dark text-decoration-none {% if request.resolver_match.url_name == 'account' %}nav-link-active{% endif %}" href="{% url 'account' %}"><img src="{{ profile_of_user.avatar.url }}" class="" width="50" height="50" style="border-radius: 50%; margin-top: 10px; margin-left: 10px;"/></a>
+                        {% else %}
+                          <a style="margin-right: 25px;" class="lead my-3 px-2 link-dark text-decoration-none {% if request.resolver_match.url_name == 'register' %}nav-link-active{% endif %}" href="{% url 'login' %}">Авторизиация</a>
+                        {% endif %}
               </nav>
          </header>
 
         <main>
             {% if messages %}
-              <ul class="lead text-muted">
+              <ul class="lead text-muted" style="padding-top: 55px; padding-left: 110px;">
                   {% for message in messages %}
                     <li>{{ message }}</li>
                   {% endfor %}
@@ -48,7 +48,7 @@
     <div id="root2">
         <footer  class="d-flex flex-wrap justify-content-between align-items-center py-3 mb-4 border-top">
             <div class="col-md-4 d-flex align-items-center">
-                <img src="/static/main/img/logo.jpg" alt="twix" width="160" height="130">
+                <img src="/static/main/img/logo.jpg" alt="twix" width="160" height="130" style="margin-left: 65px;">
                </div>
         </footer>
     </div>

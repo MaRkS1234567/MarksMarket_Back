@@ -3,6 +3,7 @@ from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 
 class Review(models.Model):
@@ -52,7 +53,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to='products/')
 
     def get_absolute_url(self):
-        return f'/account/'
+        return f'/account'
 
     def __str__(self):
         return self.name
@@ -65,7 +66,7 @@ class Yield(models.Model):
     image = models.ImageField(upload_to='products/')
 
     def get_absolute_url(self):
-        return f'/account/'
+        return f'/account'
 
     def __str__(self):
         return self.name
@@ -126,6 +127,33 @@ class Message(models.Model):
         ]
 
 
+class Order(models.Model):
+    yields = models.ForeignKey(Yield, on_delete=models.CASCADE)
+    customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    pnumber =  models.PositiveBigIntegerField('Phone number')
+    adress = models.TextField()
+
+    def get_absolute_url(self):
+        return f'/account'
+
+    def __str__(self):
+        return str(self.customer)
+    
+# class Avatar(models.Model):
+#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+#     image = models.ImageField(upload_to='avatars/')
+
+#     def __str__(self):
+#         return str(self.user)
+
+class Profile_Of_User(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    avatar = models.ImageField(default='default.png', upload_to='avatars/', null=True, blank=True)
+    bio = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return self.user.username
 
 
 

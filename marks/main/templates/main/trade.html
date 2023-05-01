@@ -74,17 +74,19 @@
     {% if user.is_authenticated %}
     <form method="post" enctype="multipart/form-data" class="">
             <h2 class="display-6 fw-normal text-center">Разместите свой товар:</h2><br>
-            {% csrf_token %}
-            <p class="fs-5 text-muted">Введите наименование товара:</p>
-            {{ product_form.name }}<br>
-            <p class="fs-5 text-muted">Введите описание товара:</p>
-            {{ product_form.description }}<br>
-            <p class="fs-5 text-muted">Введите цену товара:</p>
-            {{ product_form.price }}<br>
-            <p class="fs-5 text-muted">Прикрепите картинку:</p>
-            <p>{{ product_form.image }}</p>
-            <p class="fs-5 text-muted">*пожалуйста прикрепляйте картинку в квадратном формате</p>
-            <button type="submit" class="pinkbutton my-2 mb-2" name="form_type" value="product_form">Добавить</button>
+            <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+                {% csrf_token %}
+                <p class="fs-5 text-muted">Введите наименование товара:</p>
+                {{ product_form.name }}<br>
+                <p class="fs-5 text-muted">Введите описание товара:</p>
+                {{ product_form.description }}<br>
+                <p class="fs-5 text-muted">Введите цену товара:</p>
+                {{ product_form.price }}<br>
+                <p class="fs-5 text-muted">Прикрепите картинку:</p>
+                <p>{{ product_form.image }}</p>
+                <p class="fs-5 text-muted">*пожалуйста прикрепляйте картинку в квадратном формате</p>
+                <button type="submit" class="pinkbutton mt-1 mb-1" name="form_type" value="product_form">Добавить</button>
+            </div>
         </form>
     {% else %}
         <p1 class="fs-5 text-muted">Вы не вошли в аккаунт</p1><br><br>

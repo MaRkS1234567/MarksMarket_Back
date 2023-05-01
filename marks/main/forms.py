@@ -1,5 +1,5 @@
-from .models import Message, Review, Product, News, Offer, Comment, ReviewOfUser, Yield
-from django.forms import ModelForm, Textarea, Select, TextInput, FileInput
+from .models import Message, Review, Product, News, Offer, Comment, ReviewOfUser, Order, Profile_Of_User
+from django.forms import ModelForm, TextInput, Select, TextInput, FileInput
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
 
@@ -8,8 +8,8 @@ class ReviewForm(ModelForm):
         model = Review
         fields = ["task", "stars"]
         widgets = {
-            "task": Textarea(attrs={
-                'class': 'form-control',
+            "task": TextInput(attrs={
+                'class': 'form-control fields',
             }),
             "stars": Select(choices=[(str(star), star) for star in range(1, 6)], attrs={
                 'class': 'form-control'
@@ -21,10 +21,24 @@ class ReviewProfileForm(ModelForm):
         model = ReviewOfUser
         fields = ["task", "rating"]
         widgets = {
-            "task": Textarea(attrs={
-                'class': 'form-control',
+            "task": TextInput(attrs={
+                'class': 'form-control fields',
             }),
             "rating": Select(choices=[(str(star), star) for star in range(1, 6)], attrs={
+                'class': 'form-control fields'
+            }),
+        }
+
+
+class Profile_Of_Form(ModelForm):
+    class Meta:
+        model = Profile_Of_User
+        fields = ["bio", "avatar"]
+        widgets = {
+            "bio": TextInput(attrs={
+                'class': 'form-control',
+            }),
+            "avatar":  FileInput(attrs={
                 'class': 'form-control'
             }),
         }
@@ -38,8 +52,8 @@ class ProductForm(ModelForm):
             "name": TextInput(attrs={
                 'class': 'form-control',
             }),
-            "description": Textarea(attrs={
-                'class': 'form-control',
+            "description": TextInput(attrs={
+                'class': 'form-control fields',
             }),
             "price": TextInput(attrs={
                 'class': 'form-control',
@@ -50,21 +64,18 @@ class ProductForm(ModelForm):
         }
 
 
-# class YieldForm(ModelForm):
-#     class Meta:
-#         model = Yield
-#         fields = ["description", "price", "image"]
-#         widgets = {
-#             "description": Textarea(attrs={
-#                 'class': 'form-control',
-#             }),
-#             "price": TextInput(attrs={
-#                 'class': 'form-control',
-#             }),
-#             "image": FileInput(attrs={
-#                 'class': 'form-control',
-#             }),
-#         }
+class YieldForm(ModelForm):
+    class Meta:
+        model = Order
+        fields = ["pnumber", "adress"]
+        widgets = {
+            "pnumber": TextInput(attrs={
+                'class': 'form-control fields',
+            }),
+            "adress": TextInput(attrs={
+                'class': 'form-control fields',
+            }),
+        }
 
 
 class OfferForm(ModelForm):
@@ -78,14 +89,24 @@ class OfferForm(ModelForm):
             })
         }
 
+# class AvatarForm(ModelForm):
+#     class Meta:
+#         model = Avatar
+#         fields = ["image"]
+#         widgets = {
+#             "image": FileInput(attrs={
+#                 'class': 'form-control',
+#             })
+#         }
+
 
 class CommentForm(ModelForm):
     class Meta:
         model = Comment
         fields = ["comment"]
         widgets = {
-            "comment": Textarea(attrs={
-                'class': 'form-control',
+            "comment": TextInput(attrs={
+                'class': 'form-control fields',
                 'placeholder': 'Введите свой комментарий'
             })
         }

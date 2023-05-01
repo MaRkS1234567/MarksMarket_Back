@@ -24,6 +24,7 @@
                     {% csrf_token %}
                     <button type="submit" class="pinkbutton likebutton">Добавить в избранное</button>
                 </form>
+                <a href="{% url 'order' yield.id %} " class="pinkbutton likebutton" style="padding-left: 91px; padding-right: 91px;">Заказать товар</a>
             </div>
         {% endfor %}
                 {% if page.has_previous %}

@@ -10,8 +10,13 @@ from django.http import Http404, HttpRequest, HttpResponse
 from django.views.generic import UpdateView, DeleteView
 
 
-from .models import Review, News, Product, Favorite, Message, ReviewOfUser, Yield
-from .forms import ReviewForm, ProductForm, OfferForm, CommentForm, MessageForm, AccountCreationForm, SigninForm, ReviewProfileForm
+from .models import Review, News, Product, Favorite, Message, ReviewOfUser, Yield, Order, Profile_Of_User
+from .forms import ReviewForm, ProductForm, OfferForm, CommentForm, MessageForm, AccountCreationForm, SigninForm, ReviewProfileForm, YieldForm, Profile_Of_Form
+
+
+def alltimefunc(request):
+    profile_of_user = Profile_Of_User.objects.get(user = request.user)
+    return profile_of_user
 
 
 def index(request):
@@ -141,40 +146,80 @@ class ProductDeleteView(DeleteView):
     template_name = 'main/delete.html'
 
 
+class OrderUpdateView(UpdateView):
+    model = Order
+    template_name = 'main/update_order.html'
+    form_class = YieldForm
+
+
+class OrderDeleteView(DeleteView):
+    model = Order
+    success_url = '/account'
+    template_name = 'main/delete_order.html'
+
+
+def favourites(request):
+    favorites = Favorite.objects.filter(user=request.user).select_related('product')
+    favorites_for_yield = Favorite.objects.filter(user=request.user).select_related('yields')
+
+    context = {
+        'favorites': favorites,
+        'favorites_for_yield': favorites_for_yield,
+    }
+
+    return render(request, 'main/favourites.html', context)
+
+
+
 def account(request):
 
     profile_ = ReviewOfUser.objects.order_by('-id').filter(profile_user = request.user)
+    try:
+        profile_of_user = Profile_Of_User.objects.get(user = request.user)
+    except Profile_Of_User.DoesNotExist:
+        profile_of_user = Profile_Of_User.objects.get_or_create(user = request.user)
+    profile_of_user = Profile_Of_User.objects.get(user = request.user)
     average = round(ReviewOfUser.objects.aggregate(Avg('rating'))['rating__avg'])
     paginator_ = Paginator(profile_, 5)
     page_number_ = request.GET.get('page_')
     page_ = paginator_.get_page(page_number_)
-    favorites = Favorite.objects.filter(user=request.user).select_related('product')
-    favorites_for_yield = Favorite.objects.filter(user=request.user).select_related('yields')
+    favorites = Favorite.objects.filter(user=request.user).select_related('product').order_by('-id')[:10][::-1]
+    favorites_for_yield = Favorite.objects.filter(user=request.user).select_related('yields').order_by('-id')[:10][::-1]
     products = Product.objects.order_by('-id').prefetch_related('offers').filter(user=request.user)
-    paginator = Paginator(products, 6)
+    paginator = Paginator(favorites, 3)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
+    orders = Order.objects.order_by('-id').filter(customer = request.user).select_related('yields')
+
+    try:
+        profile = request.user.profile_of_user
+    except Profile_Of_User.DoesNotExist:
+        profile = Profile_Of_User(user=request.user)
 
     if request.method == 'POST':
-        form_type = request.POST.get('form_type')
+        profile_form = Profile_Of_Form(request.POST, request.FILES, instance=profile)
+        if profile_form.is_valid():
+            profile_form.save()
+            return redirect('account')
+    else:
+        profile_form = Profile_Of_Form(instance=profile)
 
-        if form_type == 'offer_form':
-            offer_form = OfferForm(request.POST)
+    # if request.method == 'POST':
 
-            if offer_form.is_valid():
-                offer = offer_form.save(commit=False)
-                # TODO: product validation.
-                product_id = request.POST.get('products')
-                offer.product = Product.objects.get(id=int(product_id))
-                offer.user = request.user
-                offer.save()
-                return redirect('account')
+    #     form_for_user = Profile_Of_Form(request.POST, request.FILES)
 
-            return render(request, 'main/account.html', {'offer_form': offer_form, 'page': page, 'favorites': favorites, 'products': products})
+    #     if form_for_user.is_valid():
+    #         profiles_for_user = form_for_user.save(commit=False)
+    #         profiles_for_user.user = request.user
+    #         profiles_for_user.save()
+    #         return redirect('account')
 
     context = {
         'offer_form': OfferForm(),
+        'profile_form': Profile_Of_Form(),
+        'orders': orders,
         'profile_': profile_,
+        'profile_of_user': profile_of_user,
         'page_': page_,
         'average': average,
         'page': page,
@@ -424,6 +469,7 @@ def shop(request):
 
 def profile(request, username):
     profile_user = get_object_or_404(User, username=username)
+    profile_Of_user = Profile_Of_User.objects.get(user = profile_user)
     profile_ = ReviewOfUser.objects.order_by('-id').filter(profile_user = profile_user)
     paginator = Paginator(profile_, 5)
     page_number = request.GET.get('page')
@@ -449,6 +495,7 @@ def profile(request, username):
             return render(request, 'main/profile.html', {'profile_': profile_ , 'form': form, 'page': page,'average': average,'products': products,'user_': user_,'porfiles': profiles})
 
     context = {
+        'profile_Of_user': profile_Of_user,
         'profile_': profile_ ,
         'form': form,
         'page': page,
@@ -460,3 +507,24 @@ def profile(request, username):
 
     return render(request, 'main/profile.html', context)
 
+
+def order(request, yield_id):
+    yields = get_object_or_404(Yield, id=yield_id)
+    form = YieldForm(request.POST)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            yields_ = form.save(commit=False)
+            yields_.customer = request.user
+            yields_.yields = yields
+            yields_.save()
+            return redirect('account')
+        else:
+            return render(request, 'main/shop.html', {'yields': yields, 'form': form})
+
+    context = {
+        'yields': yields,
+        'form': form
+    }
+
+    return render(request, 'main/order.html', context)

@@ -1,6 +1,6 @@
 from pyexpat.errors import messages
 from django.contrib import admin
-from .models import Review, Product, News, Offer, Comment, Message, ReviewOfUser, Yield, Favorite
+from .models import Review, Product, News, Offer, Comment, Message, ReviewOfUser, Yield, Favorite, Profile_Of_User
 # from django.contrib.auth import get_user_model
 
 # User = get_user_model()
@@ -12,6 +12,7 @@ admin.site.register(Comment)
 admin.site.register(Message)
 admin.site.register(Yield)
 admin.site.register(Favorite)
+admin.site.register(Profile_Of_User)
 
 
 class OfferInline(admin.TabularInline):

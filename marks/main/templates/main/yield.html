@@ -13,5 +13,10 @@
         <h4>{{ yields.description }}</h4><br>
         <h4>{{ yields.price }}</h4>
         <img src="{{ yields.image.url }}" width="300" height="300" class="mb-5"/>
+        <form method="post" action="{% url 'favorite_for_yields' yields.id %}">
+            {% csrf_token %}
+            <button type="submit" class="pinkbutton likebutton">Добавить в избранное</button>
+        </form>
+        <a href="{% url 'order' yields.id %} " class="pinkbutton likebutton" style="padding-left: 91px; padding-right: 91px;">Заказать товар</a>
     </div>
 {% endblock %}

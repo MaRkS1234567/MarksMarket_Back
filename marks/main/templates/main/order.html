@@ -1,0 +1,26 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+Order
+{% endblock %}
+
+{% block content %}
+<br>
+  <h1 id="h1" class="display-4 fw-normal text-center">Оформление заказа</h1><br>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+      <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+        <h1>{{ yields.name }}</h1>
+        <h4 class="fs-5 text-muted">{{ yields.description }}</h4>
+        <br>
+        <img src="{{ yields.image.url }}" width="300" height="300"/><br><br>
+        <h4 class="fs-5 text-muted">Укажите свой номер телефона :</h4>
+        <p style="max-width: 300px;">{{ form.pnumber }}</p><br>
+        <h4 class="fs-5 text-muted">Укажите свой адресс :</h4>
+        <p style="max-width: 300px;">{{ form.adress }}</p>
+        <button type="submit" class="pinkbutton me-2 mb-2">Заказать</button>
+      </div>
+
+        <!-- <button type="submit" class="pinkbutton my-2 mb-2" name="form_type" value="product_form">Добавить</button> -->
+    </form>
+{% endblock %}

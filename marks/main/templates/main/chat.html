@@ -7,7 +7,7 @@
 <br>
 <a class="pinkbutton me-2" style="margin-left: 40px; padding-left: 13px; padding-right: 13px;" href="{% url 'chats' %}">ᐊ</a>
 <a href="{% url 'profile' recipient.username %}" class="pinkbutton me-2 chatbutton">Профиль продавца</a><br><br>
-<div class="messages flex-column mt-2">
+<div class="messages flex-column mt-2 prokrutka">
   {% for message in chat_messages %}  
   <div class="d-flex">
       <div class="name_chat text-center">

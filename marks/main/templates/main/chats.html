@@ -5,11 +5,18 @@
 <div class="d-flex">
     <div class="listofchats">
         <h1 class="mt-2">Твои чаты</h1>
+        {% if users %}
             {% for user in users %}
-            <div class="text-center text-white rounded bg-dark" style="margin-bottom: 25px; margin-right: 70px; padding: 8px;">
-                <a href="{% url 'chat' user.username %}" style="color: white;" class="lead my-3 px-2 link-dark text-decoration-none mb-2 mt-2 messagetag">{{user.username}}</a><br>
+            <div class="text-center text-white rounded bg-dark" style="margin-bottom: 15px; margin-right: 70px; padding: 8px;">
+                <a href="{% url 'chat' user.username %}" style="color: white; margin-bottom: 15px;" class="lead my-3 px-2 link-dark text-decoration-none mb-2 mt-2 messagetag">{{user.username}}</a>
             </div>
             {% endfor %}
+        {% else %}    
+            <div class="text-center text-white rounded bg-dark" style="margin-bottom: 15px; margin-right: 70px; padding: 8px;">
+                <a href="{% url 'trade' %}" style="color: white; margin-bottom: 15px;" class="lead my-3 px-2 link-dark text-decoration-none mb-2 mt-2 messagetag">У тебя отсутствуют чаты. Переходи на рынок и найди продовца или продай свой товар 👥</a>
+            </div>
+        {% endif %}
+            
     </div>
     <div class="line"></div>
     <div class="chat">

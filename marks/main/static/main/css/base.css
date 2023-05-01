@@ -2,6 +2,7 @@
 
 
 .message-blue {
+  max-width: 927px;
   position: relative;
   margin-bottom: 10px;
   padding: 10px;
@@ -9,20 +10,21 @@
   color: black;
   text-align: left;
   font: 400 .9em 'Open Sans', sans-serif;
-  border: 1px solid #3e3e3e;
+  border: 1px solid #2F2F2F;
   border-radius: 10px;
   display: flex;
 }
 
 .message-orange {
+  max-width: 927px;
   position: relative;
   margin-bottom: 10px;
   padding: 10px;
-  background-color: #3e3e3e;
+  background-color: #2F2F2F;
   color: rgb(255, 255, 255);
   text-align: left;
   font: 400 .9em 'Open Sans', sans-serif;
-  border: 1px solid #3e3e3e;
+  border: 1px solid #2F2F2F;
   border-radius: 10px;
   display: flex;
 }
@@ -44,7 +46,7 @@
     position: absolute;
     width: 0;
     height: 0;
-    border-top: 17px solid #3e3e3e;
+    border-top: 17px solid #2F2F2F;
     border-left: 16px solid transparent;
     border-right: 16px solid transparent;
     top: -1px;
@@ -56,7 +58,7 @@
   position: absolute;
   width: 0;
   height: 0;
-  border-top: 15px solid #3e3e3e;
+  border-top: 15px solid #2F2F2F;
   border-left: 15px solid transparent;
   border-right: 15px solid transparent;
   top: 0;
@@ -68,7 +70,7 @@
   position: absolute;
   width: 0;
   height: 0;
-  border-top: 17px solid #3e3e3e;
+  border-top: 17px solid #2F2F2F;
   border-left: 16px solid transparent;
   border-right: 16px solid transparent;
   top: -1px;
@@ -76,7 +78,7 @@
 }
 
 .name_chat {
-  border: 1px solid #3e3e3e;
+  border: 1px solid #2F2F2F;
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -257,6 +259,7 @@ footer {
 }
 
 .account:hover {
+  text-decoration: none;
   transform: scale(1.1);
   color: rgb(114, 114, 114);
 }
@@ -268,7 +271,7 @@ footer {
 }
 
 .chat {
-  min-width: 73%;
+  min-width: 79%;
   float: right;
   height: 100%;
 }
@@ -294,7 +297,7 @@ footer {
 }
 
 .logo {
-  margin-left: 25px;
+  margin-left: 55px;
 }
 
 .nstyle {
@@ -382,4 +385,32 @@ footer {
   font-size: 20px;
   /* text-decoration: none;
   border-radius: 5px; */
+}
+
+.prokrutka {
+  overflow-y:auto;
+  overflow-x: hidden;
+  height: 525px;
+}
+
+.avatar {
+  border-radius: 50%;
+  margin-left: 30px;
+  margin-top: 30px;
+}
+
+.bio {
+  margin-top: 50px;
+  margin-left: 30px;
+}
+
+.bio_form {
+  margin: 30px;
+}
+
+.avatar_form {
+  margin: 30px;
+}
+
+.fields {
 }

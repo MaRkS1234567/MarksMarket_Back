@@ -5,26 +5,26 @@
 {% endblock %}
 
 {% block content %}
-    <h1 class="display-4 fw-normal text-center mt-4">Ваш аккаунт</h1><br>
-    <h4 class="display-6 fw-normal text-center">Избранные товары</h4><br>
-    {% if favorites %}
+    <h1 class="display-4 fw-normal text-center mt-4">{{ request.user.username }}</h1><br>
+    {% if profile_of_user.bio %}
+    <div class="text-center text-white rounded bg-dark" style="margin-bottom: 25px; min-height: 130px;">
+        <img src="{{ profile_of_user.avatar.url }}" class="avatar" width="75" height="75" style="float: left;"/>
+        <p style="float: left;" class="fs-5 text-muted bio">{{profile_of_user.bio}}</p><br><br>
+    </div>
+    {% endif %}
+    {% if page %}
+        <div class="p-4 p-md-5 mb-4  rounded bg-dark d-flex">
+            <a class="display-6 text-white fw-normal account" style="padding: 2.75rem 0;" href="{% url 'favorites' %}">Избранные товары</a>
         {% for favorite in favorites %}
-            {% if favorite.product.name %}
-                <div class="p-4 p-md-5 mb-4  rounded bg-dark d-flex">
-                    <a class="display-6 text-white fw-normal text-decoration-none account" style="padding: 2.75rem 0;" href="{% url 'product' favorite.product.id %}">{{ favorite.product.name }}</a>
+                {% if favorite.product.name %} 
                     <img src="{{ favorite.product.image.url }}" width="150" height="150" style="margin-left:auto;" />
-                </div>
-            {% endif %}
-        {% endfor %}
-        {% for favorite in favorites %}
-            {% if favorite.yields.name %}
-                <div class="p-4 p-md-5 mb-4  rounded bg-dark d-flex">
-                    <a class="display-6 text-white fw-normal text-decoration-none account" style="padding: 2.75rem 0;" href="{% url 'yields' favorite.yields.id %}">{{ favorite.yields.name }} </a>
-                    <h5 style="color: white; padding-top: 60px; padding-left: 15px;"> ( товар от нашей платформы ✅ )</h5>
+                {% endif %}
+                {% if favorite.yields.name %}
                     <img src="{{ favorite.yields.image.url }}" width="150" height="150" style="margin-left:auto;" />
-                </div>
-            {% endif %}
+                {% endif %}
         {% endfor %}
+        </div>
+
     {% else %}
     <div class="text-center">
         <a href="{% url 'trade' %}" class="pinkbutton text-center">Корзина пуста! Скорее за покупками🤠</a>
@@ -37,18 +37,34 @@
     
     {% for product in products %}
     <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark d-flex">
-        <a class="display-6 fw-normal text-white text-decoration-none account" style="padding: 2.75rem 0;" href="{% url 'product' product.id %}">{{ product.name }}</a>  
+        <a class="display-6 fw-normal text-white account" style="padding: 2.75rem 0;" href="{% url 'product' product.id %}">{{ product.name }}</a>  
             <img src="{{ product.image.url }}" width="150" height="150" style="margin-left:auto;" />
             <a href="{% url 'product-update' product.id %}" class="update">Редактировать</a>
     </div>
     {% endfor %}
     {% else %}
     <div class="text-center">
-    <a href="{% url 'trade' %}" class="pinkbutton">Скорее выложете свой первый товар!</a>
-    </div>
+    <a href="{% url 'trade' %}" class="pinkbutton">Скорее выложете свой первый товар! 👟</a><br>
+    </div><br>
     {% endif %}
     
-    <h4 class="display-6 fw-normal text-center">Твои отзывы</h4><br>
+    <h4 class="display-6 fw-normal text-center">Мои заказы</h4><br>
+
+    {% if orders %}
+    {% for order in orders %}
+        <div class="p-4 p-md-5 mb-4  rounded bg-dark d-flex">
+            <a class="display-6 text-white fw-normal account" style="padding: 2.75rem 0;" href="">{{ order.yields.name }}</a>
+            <img src="{{ order.yields.image.url }}" width="150" height="150" style="margin-left:auto;" />
+            <a href="{% url 'order-update' order.id %}" class="update">Редактировать</a>
+        </div>
+    {% endfor %}
+    {% else %}
+        <div class="text-center">
+            <a href="{% url 'shop' %}" class="pinkbutton text-center">Заказы отсутствуют! Скорее за покупками🤠</a><br>
+        </div><br>
+    {% endif %}
+
+    <h4 class="display-6 fw-normal text-center">Мои отзывы</h4><br>
 
     <div class="text-center text-white rounded bg-dark" style="margin-bottom: 25px;">
         <h4 style="padding: 30px; color: white;">Твоя репутация  {{ average }}★</h4>
@@ -80,12 +96,33 @@
         <h4>У тебя отсутствуют отзывы 👤</h4>
     </div>
     {% endif %}
+
+    {% if profile_of_user.bio %}
+        <h4 class="display-6 fw-normal text-center">Редактирование профиля</h4><br>
+    {% else %}
+        <h4 class="display-6 fw-normal text-center">Заполните свой профиль</h4><br>
+    {% endif %}
+    <div class="text-center text-white rounded bg-dark" style="margin-bottom: 25px; min-height: 130px;">
+        <p style="padding-top: 30px;" class="fs-5 text-muted text-center">Выберите аватар</p>
+        <form method="post" enctype="multipart/form-data" class="">
+            {% csrf_token %}
+            <div class="avatar_form">{{ profile_form.avatar }}</div>
+            <p class="fs-5 text-muted text-center">Введите описание профиля</p>
+            <div class="bio_form">{{ profile_form.bio }}</div>
+            <div class="d-flex">
+                <button style="margin-left: 30px; margin-bottom: 30px;" name="profile_form" type="submit" class="pinkbutton">Сохранить</button>
+            </div>
+        </form>
+    </div>
+    <div class="d-flex">
         <form action="{% url 'logout' %}" method="POST">
             {% csrf_token %}
-            <div class="text-center my-2">
+            <div class="text-center">
                 <button type="submit" class="pinkbutton">Выйти из аккаунта</button>
             </div>
         </form>
+        <button style="margin-left: 30px;" type="submit" class="pinkbutton">Удалить аккаунт</button>
+    </div>
 {% endblock %}
 {% block content2 %}
 

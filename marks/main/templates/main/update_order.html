@@ -1,0 +1,26 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+Update order
+{% endblock %}
+
+{% block content %}
+  <h1 id="h1" class="display-4 fw-normal text-center">Редактирование заказа</h1><br>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+      <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+        <label for="id_fullname"class="display-7 fw-normal my-4 ">Введите ваш номер телефона:</label>
+        <p id="name">{{ form.pnumber }}</p>
+        
+        <label for="id_pnumber" class="display-7 fw-normal my-4 ">Введите ваш адресс:</label>
+        <p id="description">{{ form.adress }}</p>
+        
+        {{ error }}
+
+        <button class="greenbutton" type="submit">Обновить</button>
+        <a href="{% url 'order-delete' order.id %}" class="redbutton">Удалить продукт</a>
+      </div>
+
+        <!-- <button type="submit" class="pinkbutton my-2 mb-2" name="form_type" value="product_form">Добавить</button> -->
+    </form>
+{% endblock %}
