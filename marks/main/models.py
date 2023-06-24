@@ -29,6 +29,7 @@ class Review(models.Model):
 
 class News(models.Model):
     news = models.TextField()
+    description = models.TextField()
     source = models.CharField(max_length=30)
     imagenews = models.ImageField(upload_to='products/')
 

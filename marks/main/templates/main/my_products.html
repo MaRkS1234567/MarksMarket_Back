@@ -1,0 +1,26 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+мои товары
+{% endblock %}
+
+{% block content %}
+
+<h1 class="display-4 fw-normal text-center mt-4">Мои товары</h1><br>
+{% if products %}
+    
+{% for product in products %}
+
+<div class="p-4 p-md-5 mb-4 text-white rounded bg-dark d-flex">
+    <a class="display-6 fw-normal text-white account" style="padding: 2.75rem 0;" href="{% url 'product' product.id %}">{{ product.name }}</a>  
+        <img src="{{ product.image.url }}" width="150" height="150" style="margin-left:auto;" />
+        <a href="{% url 'product-update' product.id %}" class="update">Редактировать</a>
+</div>
+{% endfor %}
+{% else %}
+<div class="text-center">
+<a href="{% url 'trade' %}" class="pinkbutton">Скорее выложете свой первый товар! 👟</a><br>
+</div><br>
+{% endif %}
+
+{% endblock %}

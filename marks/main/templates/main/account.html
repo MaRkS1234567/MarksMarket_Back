@@ -12,57 +12,67 @@
         <p style="float: left;" class="fs-5 text-muted bio">{{profile_of_user.bio}}</p><br><br>
     </div>
     {% endif %}
+    <h4 class="display-6 fw-normal text-center my-3">Товары и заказы</h4><br>
+
+    <div class="parent">
+
     {% if page %}
         <div class="p-4 p-md-5 mb-4  rounded bg-dark d-flex">
             <a class="display-6 text-white fw-normal account" style="padding: 2.75rem 0;" href="{% url 'favorites' %}">Избранные товары</a>
-        {% for favorite in favorites %}
-                {% if favorite.product.name %} 
-                    <img src="{{ favorite.product.image.url }}" width="150" height="150" style="margin-left:auto;" />
-                {% endif %}
-                {% if favorite.yields.name %}
-                    <img src="{{ favorite.yields.image.url }}" width="150" height="150" style="margin-left:auto;" />
-                {% endif %}
-        {% endfor %}
+            <div style="margin-left: auto;">
+                {% for favorite in favorites %}
+                    {% if favorite.product.name %} 
+                        <img src="{{ favorite.product.image.url }}" width="150" height="150" style="margin-left: 50px;" />
+                    {% endif %}
+                    {% if favorite.yields.name %}
+                        <img src="{{ favorite.yields.image.url }}" width="150" height="150" style="margin-left: 50px;" />
+                    {% endif %}
+                {% endfor %}
+            </div>
         </div>
 
     {% else %}
     <div class="text-center">
-        <a href="{% url 'trade' %}" class="pinkbutton text-center">Корзина пуста! Скорее за покупками🤠</a>
-    </div>
+        <a href="{% url 'trade' %}" class="pinkbutton text-center">Корзина пуста! Скорее за покупками🤠</a><br>
+    </div><br>
     {% endif %}
 
-    <h4 class="display-6 fw-normal text-center my-3">Мои товары</h4><br>
+    <!-- <h4 class="display-6 fw-normal text-center my-3">Мои товары</h4><br> -->
     
     {% if products %}
     
-    {% for product in products %}
     <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark d-flex">
-        <a class="display-6 fw-normal text-white account" style="padding: 2.75rem 0;" href="{% url 'product' product.id %}">{{ product.name }}</a>  
-            <img src="{{ product.image.url }}" width="150" height="150" style="margin-left:auto;" />
-            <a href="{% url 'product-update' product.id %}" class="update">Редактировать</a>
+        <a class="display-6 fw-normal text-white account" style="padding: 2.75rem 0;" href="{% url 'my_products' %}">Мои товары</a>  
+        <div style="margin-left: auto;">
+            {% for product in products %}
+                <img src="{{ product.image.url }}" width="150" height="150" style="margin-left:50px;" />
+            {% endfor %}
+        </div>
     </div>
-    {% endfor %}
     {% else %}
     <div class="text-center">
     <a href="{% url 'trade' %}" class="pinkbutton">Скорее выложете свой первый товар! 👟</a><br>
     </div><br>
     {% endif %}
     
-    <h4 class="display-6 fw-normal text-center">Мои заказы</h4><br>
+    <!-- <h4 class="display-6 fw-normal text-center">Мои заказы</h4><br> -->
 
     {% if orders %}
-    {% for order in orders %}
         <div class="p-4 p-md-5 mb-4  rounded bg-dark d-flex">
-            <a class="display-6 text-white fw-normal account" style="padding: 2.75rem 0;" href="">{{ order.yields.name }}</a>
-            <img src="{{ order.yields.image.url }}" width="150" height="150" style="margin-left:auto;" />
-            <a href="{% url 'order-update' order.id %}" class="update">Редактировать</a>
+            <a class="display-6 text-white fw-normal account" style="padding: 2.75rem 0;" href="{% url 'my_orders' %}">Мои заказы</a>
+            <div style="margin-left: auto;">
+                {% for order in orders %}
+                    <img src="{{ order.yields.image.url }}" width="150" height="150" style="margin-left:50px;" />
+                {% endfor %}
+            </div>
         </div>
-    {% endfor %}
     {% else %}
         <div class="text-center">
             <a href="{% url 'shop' %}" class="pinkbutton text-center">Заказы отсутствуют! Скорее за покупками🤠</a><br>
         </div><br>
     {% endif %}
+
+    </div>
 
     <h4 class="display-6 fw-normal text-center">Мои отзывы</h4><br>
 
@@ -121,7 +131,7 @@
                 <button type="submit" class="pinkbutton">Выйти из аккаунта</button>
             </div>
         </form>
-        <button style="margin-left: 30px;" type="submit" class="pinkbutton">Удалить аккаунт</button>
+        <a style="margin-left: 30px;" class="pinkbutton" href="{% url 'user-delete' request.user.id %}">Удалить аккаунт</a>
     </div>
 {% endblock %}
 {% block content2 %}

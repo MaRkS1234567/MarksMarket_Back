@@ -14,6 +14,8 @@ urlpatterns = [
     path('note', views.note, name='note'),
     path('chats', views.chats, name='chats'),
     path('favorites', views.favourites, name='favorites'),
+    path('my_products', views.my_products, name='my_products'),
+    path('my_orders', views.my_orders, name='my_orders'),
     path('news/<int:news_id>', views.news, name='news'),
     path('product/<int:product_id>', views.product, name='product'),
     path('yields/<int:yield_id>', views.yields , name='yields'),
@@ -24,6 +26,8 @@ urlpatterns = [
     path('chat/<str:username>', views.chat, name='chat'), 
     path('product/<int:pk>/update', views.ProductUpdateView.as_view(), name='product-update'),
     path('product/<int:pk>/delete', views.ProductDeleteView.as_view(), name='product-delete'),
+    path('user/<int:pk>/delete', views.UserDeleteView.as_view(), name='user-delete'),
+    path('favorite/<int:pk>/delete', views.FavoriteDeleteView.as_view(), name='favorite-delete'),
     path('order/<int:pk>/update', views.OrderUpdateView.as_view(), name='order-update'),
     path('order/<int:pk>/delete', views.OrderDeleteView.as_view(), name='order-delete')
 ]

@@ -13,7 +13,7 @@
                 <h3>{{ news.news }}</h3><br>
                 <img src="{{ news.imagenews.url }}" width="300" height="300"/><br><br>
                 <h4 class="fs-5 text-muted">Источник {{ news.source }}</h4><br>
-                <a class="pinkbutton my-4" style="padding: 10px;" href="{% url 'news' news.id %}">Комментарии</a>
+                <a class="pinkbutton my-4" style="padding: 10px; padding-left: 52px; padding-right: 52px;" href="{% url 'news' news.id %}">Комментарии и описание</a>
             </div>
         {% endfor %}
             {% if page.has_previous %}

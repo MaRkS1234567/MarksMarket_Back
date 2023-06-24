@@ -13,6 +13,7 @@ from django.views.generic import UpdateView, DeleteView
 from .models import Review, News, Product, Favorite, Message, ReviewOfUser, Yield, Order, Profile_Of_User
 from .forms import ReviewForm, ProductForm, OfferForm, CommentForm, MessageForm, AccountCreationForm, SigninForm, ReviewProfileForm, YieldForm, Profile_Of_Form
 
+User = get_user_model()
 
 def alltimefunc(request):
     profile_of_user = Profile_Of_User.objects.get(user = request.user)
@@ -146,6 +147,18 @@ class ProductDeleteView(DeleteView):
     template_name = 'main/delete.html'
 
 
+class UserDeleteView(DeleteView):
+    model = User
+    success_url = '/shop'
+    template_name = 'main/user_delete.html'
+
+
+class FavoriteDeleteView(DeleteView):
+    model = Favorite
+    success_url = '/account'
+    template_name = 'main/delete_favorite.html'
+
+
 class OrderUpdateView(UpdateView):
     model = Order
     template_name = 'main/update_order.html'
@@ -183,13 +196,13 @@ def account(request):
     paginator_ = Paginator(profile_, 5)
     page_number_ = request.GET.get('page_')
     page_ = paginator_.get_page(page_number_)
-    favorites = Favorite.objects.filter(user=request.user).select_related('product').order_by('-id')[:10][::-1]
-    favorites_for_yield = Favorite.objects.filter(user=request.user).select_related('yields').order_by('-id')[:10][::-1]
-    products = Product.objects.order_by('-id').prefetch_related('offers').filter(user=request.user)
+    favorites = Favorite.objects.filter(user=request.user).select_related('product').order_by('-id')[:4]
+    favorites_for_yield = Favorite.objects.filter(user=request.user).select_related('yields').order_by('-id')[:4]
+    products = Product.objects.order_by('-id').prefetch_related('offers').filter(user=request.user)[:4]
     paginator = Paginator(favorites, 3)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    orders = Order.objects.order_by('-id').filter(customer = request.user).select_related('yields')
+    orders = Order.objects.order_by('-id').filter(customer = request.user).select_related('yields')[:4]
 
     try:
         profile = request.user.profile_of_user
@@ -262,9 +275,11 @@ def news(request, news_id):
 def product(request, product_id):
     product = get_object_or_404(
         Product.objects.prefetch_related('offers'), id=product_id)
+    favorite = Favorite.objects.get(product = product, user=request.user)
 
     context = {
         'product': product,
+        'favorite': favorite,
         'offer_form': OfferForm()
     }
 
@@ -289,9 +304,11 @@ def product(request, product_id):
 
 def yields(request, yield_id):
     yields = get_object_or_404(Yield, id=yield_id)
+    favorite_for_yield = Favorite.objects.get(yields=yields, user=request.user)
 
     context = {
         'yields': yields,
+        'favorite_for_yield': favorite_for_yield,
     }
     return render(request, 'main/yield.html', context)
 
@@ -398,9 +415,9 @@ def chat(request: HttpRequest, username):
      
     sender = request.user
     recipient = get_object_or_404(User, username=username)
-    messages = Message.objects.filter(Q(sender=sender, recipient=recipient) | Q(sender=recipient, recipient=sender)
-                                      ).order_by('created_at')
+    messages = Message.objects.filter(Q(sender=sender, recipient=recipient) | Q(sender=recipient, recipient=sender)).order_by('created_at')
     form = MessageForm(request.POST)
+    profile_of_sender = Profile_Of_User.objects.get(user = recipient)
 
     if request.method == 'POST':
         if form.is_valid():
@@ -413,6 +430,7 @@ def chat(request: HttpRequest, username):
     context = {
         'users': users,
         'recipient': recipient,
+        'profile_of_sender': profile_of_sender,
         'sender': sender,
         'chat_messages': messages,
         'form': form,
@@ -425,9 +443,13 @@ def chats(request: HttpRequest):
         Q(sent_messages__recipient=request.user) | 
         Q(received_messages__sender=request.user)
     ).distinct()
+    sender = request.user
+    # recipient = get_object_or_404(User)
+    messages = Message.objects.filter(sender = sender)[:1]
 
     context = {
-        'users': users
+        'users': users,
+        'chat__messages': messages
     }
 
     return render(request, 'main/chats.html', context)
@@ -528,3 +550,19 @@ def order(request, yield_id):
     }
 
     return render(request, 'main/order.html', context)
+
+
+def my_products(request):
+    products = Product.objects.order_by('-id').prefetch_related('offers').filter(user=request.user)
+    context = {
+        'products': products
+    }
+    return render(request, 'main/my_products.html', context)
+
+
+def my_orders(request):
+    orders = Order.objects.order_by('-id').filter(customer = request.user).select_related('yields')
+    context = {
+        'orders': orders
+    }
+    return render(request, 'main/my_orders.html', context)

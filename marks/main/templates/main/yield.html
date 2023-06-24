@@ -11,12 +11,9 @@
     <h1 class="display-4 fw-normal text-center mt-4">{{ yields.name }}</h1>
     <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
         <h4>{{ yields.description }}</h4><br>
-        <h4>{{ yields.price }}</h4>
-        <img src="{{ yields.image.url }}" width="300" height="300" class="mb-5"/>
-        <form method="post" action="{% url 'favorite_for_yields' yields.id %}">
-            {% csrf_token %}
-            <button type="submit" class="pinkbutton likebutton">Добавить в избранное</button>
-        </form>
+        <h4>{{ yields.price }}</h4><br>
+        <img src="{{ yields.image.url }}" width="300" height="300" class="mb-5"/><br>
+        <a href="{% url 'favorite-delete' favorite_for_yield.id %}" class="pinkbutton profilebutton" style="padding-left: 61px; padding-right: 61px;">Удалить из избранного</a><br><br>
         <a href="{% url 'order' yields.id %} " class="pinkbutton likebutton" style="padding-left: 91px; padding-right: 91px;">Заказать товар</a>
     </div>
 {% endblock %}

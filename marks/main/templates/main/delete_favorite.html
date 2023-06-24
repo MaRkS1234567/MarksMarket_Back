@@ -1,10 +1,10 @@
 {% extends 'main/base.html' %} 
 
-{% block title %}Удаление товара{% endblock %}
+{% block title %}Удаление из избранного{% endblock %}
 
 {% block content %}
 <br>
-        <h3 class="display-7 fw-normal text-center mb-3">Вы точно хотите удалить ваш товар?</h3>
+        <h3 class="display-7 fw-normal text-center mb-3">Вы точно хотите удалить этот товар из избранного?</h3>
         <div class="d-flex">
             <form method="post" class="yes_form">
                 {% csrf_token %}

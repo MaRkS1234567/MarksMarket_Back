@@ -45,7 +45,8 @@
                           <button type="submit" class="btn btn-outline-success offerbutton mb-2" name="form_type" value="offer_form" style="margin-left: 0.5rem;">Добавить offer</button>
                     {% endfor %} 
                     </form>
-                    <a href="{% url 'profile' product.user.username %}" class="pinkbutton profilebutton">Профиль продавца</a>
+                    <a href="{% url 'profile' product.user.username %}" class="pinkbutton profilebutton">Профиль продавца</a><br><br>
+                    <a href="{% url 'favorite-delete' favorite.id %}" class="pinkbutton profilebutton" style="padding-left: 61px; padding-right: 61px;">Удалить из избранного</a>
             {% endif %}
         </div>
     {% endif %}

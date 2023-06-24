@@ -18,7 +18,7 @@
             <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
                 <h1>{{ yield.name }}</h1>
                 <h4 class="fs-5 text-muted">{{ yield.description }}</h4>
-                <h4>{{ yield.price }}</h4>
+                <h4>{{ yield.price }}</h4><br>
                 <img src="{{ yield.image.url }}" width="300" height="300"/><br>
                 <form method="post" action="{% url 'favorite_for_yields' yield.id %}">
                     {% csrf_token %}

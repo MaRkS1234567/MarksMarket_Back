@@ -7,6 +7,7 @@
 {% block content %}
 <h3 class="display-5 fw-normal text-center">{{ news.news }}</h1><br>
     <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+    <h4 class="fs-5 text-muted">{{ news.description }}</h4><br>
     <img src="{{ news.imagenews.url }}" width="300" height="300"/><br><br>
     <h4 class="fs-5 text-muted">Источник {{ news.source }}</h4><br>
     <h4>Комментарии:</h4><br>
@@ -23,7 +24,7 @@
         {% if user.is_authenticated %}
             <form method="post" enctype="multipart/form-data date2">
                 {% csrf_token %}
-                <h4>Прокомментируйте:</h4>
+                <h4>Прокомментируйте:</h4><br>
                 {% for field3 in comment_form %}
                     <div>
                         <p1 class="fs-5 text-muted">{{ field3 }}</p1>
@@ -35,7 +36,7 @@
                 {% endfor %}
                     <div>
                         <input type="hidden" name="news" value="{{ news.id }}" />
-                    </div>
+                    </div><br>
                 <button type="submit" class="pinkbutton me-4 my-2 mb-2" name="form_type" value="comment_form">Добавить комментарий</button>
             </form>
             {% else %}

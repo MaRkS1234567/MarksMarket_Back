@@ -78,7 +78,6 @@
 }
 
 .name_chat {
-  border: 1px solid #2F2F2F;
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -279,6 +278,7 @@ footer {
 .line {
   width: 1px;
   background-color: rgb(222, 216, 216);
+  height: 666px;
 }
 
 .line2 {
@@ -413,4 +413,43 @@ footer {
 }
 
 .fields {
+}
+
+.account_table {
+  height: 130px;
+}
+
+.pink {
+  background: rgb(174, 0, 108);
+  margin-bottom: 130px;
+}
+
+.green {
+  background: #006600;
+}
+
+.blue {
+  background: #009fcb;
+}
+
+/* .child {
+  position: absolute;
+  top: 0;
+}
+
+.parent {
+  position: relative;
+  height: 410px;
+} */
+
+.pink:hover {
+  
+}
+
+.blue:hover {
+  
+}
+
+.green:hover {
+  
 }

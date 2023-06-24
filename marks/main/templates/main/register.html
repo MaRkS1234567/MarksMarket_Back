@@ -17,9 +17,9 @@
             <p class="fs-5 text-muted">Повторите ваш пароль:</p>
             {{ form.password2 }}<br>
             {{ form.error }}
-            <button type="submit" class="pinkbutton me-2 mb-2">Зарегистрироваться</button>
+            <button style="padding-top: 3px;" type="submit" class="pinkbutton">Зарегистрироваться</button>
         </form><br>
-        <a class="centres date" href="{% provider_login_url 'google' %}">Login With Google</a>
+        <a class="centres pinkbutton" href="{% provider_login_url 'google' %}">Войти с помощью Google</a>
     </div>
 {% endblock %}
 
