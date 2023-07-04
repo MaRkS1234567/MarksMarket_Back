@@ -83,7 +83,9 @@
                 <p class="fs-5 text-muted">Введите цену товара:</p>
                 {{ product_form.price }}<br>
                 <p class="fs-5 text-muted">Прикрепите картинку:</p>
-                <p>{{ product_form.image }}</p>
+                <div class="d-flex">
+                    <p style="min-width: 820px; margin-right: 15px;">{{ product_form.image }}</p><input type="button" value="Добавать еще фото" class="form-control" style="max-height: 38px;"/>
+                </div>
                 <p class="fs-5 text-muted">*пожалуйста прикрепляйте картинку в квадратном формате</p>
                 <button type="submit" class="pinkbutton mt-1 mb-1" name="form_type" value="product_form">Добавить</button>
             </div>

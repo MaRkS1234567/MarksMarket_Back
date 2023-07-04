@@ -23,6 +23,7 @@ class ReviewProfileForm(ModelForm):
         widgets = {
             "task": TextInput(attrs={
                 'class': 'form-control fields',
+                'placeholder': 'Введите свой отзыв'
             }),
             "rating": Select(choices=[(str(star), star) for star in range(1, 6)], attrs={
                 'class': 'form-control fields'

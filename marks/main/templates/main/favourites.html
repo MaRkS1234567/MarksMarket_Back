@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1 class="display-4 fw-normal text-center mt-4">Избранные товары</h1><br>
+    <h2 class="display-5 fw-normal text-center mt-4">Избранные товары</h2><br>
     {% if favorites %}
         {% for favorite in favorites %}
             {% if favorite.product.name %}
@@ -28,8 +28,13 @@
         <a href="{% url 'trade' %}" class="pinkbutton text-center">Корзина пуста! Скорее за покупками🤠</a>
     </div>
     {% endif %}
-
-
+    <!-- <h2 class="display-5 fw-normal text-center mt-4">Твои offer'ы</h2><br>
+    {% for offer in offers %}
+        <div class="p-3 p-md-5 mb-4  rounded bg-dark d-flex">
+            <a class="display-6 text-white fw-normal account" style="padding: 0;" href="{% url 'product' offer.product.id %}">{{ offer.product.name }} </a>
+            <p class="display-6 text-white fw-normal account" style="color: white; margin: 0; margin-left:auto;">{{ offer.price }}</p>
+        </div>
+    {% endfor %} -->
 {% endblock %}
 {% block content2 %}
 

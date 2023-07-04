@@ -10,7 +10,7 @@ from django.http import Http404, HttpRequest, HttpResponse
 from django.views.generic import UpdateView, DeleteView
 
 
-from .models import Review, News, Product, Favorite, Message, ReviewOfUser, Yield, Order, Profile_Of_User
+from .models import Review, News, Product, Favorite, Message, ReviewOfUser, Yield, Order, Profile_Of_User, Offer
 from .forms import ReviewForm, ProductForm, OfferForm, CommentForm, MessageForm, AccountCreationForm, SigninForm, ReviewProfileForm, YieldForm, Profile_Of_Form
 
 User = get_user_model()
@@ -276,8 +276,10 @@ def product(request, product_id):
     product = get_object_or_404(
         Product.objects.prefetch_related('offers'), id=product_id)
     favorite = Favorite.objects.get(product = product, user=request.user)
+    offers = Offer.objects.filter(user = request.user, product = product)
 
     context = {
+        'offers': offers,
         'product': product,
         'favorite': favorite,
         'offer_form': OfferForm()
@@ -291,7 +293,7 @@ def product(request, product_id):
 
             if offer_form.is_valid():
                 offer = offer_form.save(commit=False)
-                offer.news = product
+                offer.product = product
                 offer.user = request.user
                 offer.save()
                 return redirect('product', product_id=product_id)

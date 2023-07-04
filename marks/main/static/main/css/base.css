@@ -198,6 +198,10 @@ nav a:hover {
   max-width: 400px;
 }
 
+li {
+  list-style-image: url('/marks/media/svgs/li.png');
+}
+
 footer {
   background: white;
 }
@@ -297,7 +301,7 @@ footer {
 }
 
 .logo {
-  margin-left: 55px;
+  margin-left: 120px;
 }
 
 .nstyle {

@@ -13,7 +13,7 @@
 <body>
     <div id="root">
      <header class="d-flex flex-column flex-md-row align-items-center pb-3 border-bottom p-3">
-         <img src="/static/main/img/logo 2.jpg" alt="twix" width="120" height="90" class="logo">
+         <img style="margin-left: 120px;" src="/static/main/img/logo 2.jpg" alt="twix" width="120" height="90" class="logo">
               <nav class=" nav col-12 col-md-auto mb-2 justify-content-center mb-md-0 d-inline-flex mt-2 mt-md-0 ms-md-auto nstyle">
                   <a class="lead my-3 px-2 link-dark text-decoration-none {% if request.resolver_match.url_name == 'home' %}nav-link-active{% endif %}" href="{% url 'home' %}">Главная</a>
                   <a class="lead my-3 px-2 link-dark text-decoration-none {% if request.resolver_match.url_name == 'home' %}nav-link-active{% endif %}" href="{% url 'shop' %}">Магазин</a>
@@ -23,9 +23,9 @@
                         {% if user.is_authenticated %}
                         <a class="lead my-3 px-2 link-dark text-decoration-none {% if request.resolver_match.url_name == 'chats' %}nav-link-active{% endif %}" href="{% url 'chats' %}">Чаты</a>
                             {% if default_ == 0 %}
-                                <a style="margin-right: 25px;" class="lead link-dark text-decoration-none {% if request.resolver_match.url_name == 'account' %}nav-link-active{% endif %}" href="{% url 'account' %}"><img src="{{ profile_of_user.avatar.url }}" class="" width="50" height="50" style="border-radius: 50%; margin-top: 10px; margin-left: 10px;"/></a>
+                                <a style="margin-right: 25px;" class="lead link-dark text-decoration-none {% if request.resolver_match.url_name == 'account' %}nav-link-active{% endif %}" href="{% url 'account' %}"><img src="{{ profile_of_user.avatar.url }}" class="" width="50" height="50" style="border-radius: 50%; margin-top: 10px; margin-left: 10px; margin-right: 72px;"/></a>
                             {% else %}
-                                <a style="margin-right: 25px;" class="lead link-dark text-decoration-none {% if request.resolver_match.url_name == 'account' %}nav-link-active{% endif %}" href="{% url 'account' %}"><img src="media/default.png" class="" width="50" height="50" style="border-radius: 50%; margin-top: 10px; margin-left: 10px;"/></a>
+                                <a style="margin-right: 25px;" class="lead link-dark text-decoration-none {% if request.resolver_match.url_name == 'account' %}nav-link-active{% endif %}" href="{% url 'account' %}"><img src="media/default.png" class="" width="50" height="50" style="border-radius: 50%; margin-top: 10px; margin-left: 10px; margin-right: 72px;"/></a>
                             {% endif %}
                         {{ endif }}
                         {% else %}
@@ -53,7 +53,7 @@
     <div id="root2">
         <footer  class="d-flex flex-wrap justify-content-between align-items-center py-3 mb-4 border-top">
             <div class="col-md-4 d-flex align-items-center">
-                <img src="/static/main/img/logo.jpg" alt="twix" width="160" height="130" style="margin-left: 65px;">
+                <img src="/static/main/img/logo.jpg" alt="twix" width="160" height="130" style="margin-left: 130px;">
                </div>
         </footer>
     </div>

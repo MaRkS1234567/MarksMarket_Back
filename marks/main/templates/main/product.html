@@ -16,11 +16,11 @@
             <img src="{{ product.image.url }}" width="300" height="300" class="mb-5"/>
             <h4>Предложения по товему продукту:</h4>
             {% if product.offers %}
+            <ul>
                 {% for offer in product.offers.all %}
-                    <ul>
-                        <li class="fs-5 text-muted"><a href="{% url 'chat' offer.user.username %}">{{ offer.user }}</a> предлагает {{ offer.price }}</li>
-                    </ul>
+                    <li style="list-style-image: url('/media/li-style.svg'); margin-left: 20px;" class="fs-5 text-muted"><a href="{% url 'profile' offer.user.username %}">{{ offer.user }}</a> предлагает {{ offer.price }}</li>
                 {% endfor %}
+            </ul>
             {% else %}
                 <h4 class="fs-5 text-muted">Офферов к этому продукту нет(</h4>
             {% endif %} 
@@ -32,6 +32,14 @@
             <h4>{{ product.price }}</h4>
             <img src="{{ product.image.url }}" width="300" height="300" class="mb-5"/>
             {% if user.is_authenticated %}
+            {% if offers %}
+                <h4 style="margin-bottom: 20px;">Ваши offer'ы по продукту:</h4>
+                <ul class="mb-4">
+                {% for offer in offers %}
+                    <li style="list-style-image: url('/media/li-style.svg'); margin-left: 20px;" class="fs-5 text-muted">{{ offer.price }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
                 <h4>Предложите свою цену:</h4><br>
                     <form method="post" style="margin-bottom: 8px;" enctype="multipart/form-data" class="d-flex">
                     {% csrf_token %}
@@ -46,7 +54,7 @@
                     {% endfor %} 
                     </form>
                     <a href="{% url 'profile' product.user.username %}" class="pinkbutton profilebutton">Профиль продавца</a><br><br>
-                    <a href="{% url 'favorite-delete' favorite.id %}" class="pinkbutton profilebutton" style="padding-left: 61px; padding-right: 61px;">Удалить из избранного</a>
+                        <a href="{% url 'favorite-delete' favorite.id %}" class="pinkbutton profilebutton" style="padding-left: 61px; padding-right: 61px;">Удалить из избранного</a>
             {% endif %}
         </div>
     {% endif %}
