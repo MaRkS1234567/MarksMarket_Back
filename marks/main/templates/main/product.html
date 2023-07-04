@@ -8,30 +8,45 @@
 {% endblock %}
 
 {% block content2 %}
-    {% if user == product.user %}
-        <h1 class="display-4 fw-normal text-center mt-4">{{ product.name }}</h1>
-        <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
-            <h4>{{ product.description }}</h4>
-            <h4>{{ product.price }}</h4>
-            <img src="{{ product.image.url }}" width="300" height="300" class="mb-5"/>
-            <h4>Предложения по товему продукту:</h4>
-            {% if product.offers %}
-            <ul>
-                {% for offer in product.offers.all %}
-                    <li style="list-style-image: url('/media/li-style.svg'); margin-left: 20px;" class="fs-5 text-muted"><a href="{% url 'profile' offer.user.username %}">{{ offer.user }}</a> предлагает {{ offer.price }}</li>
-                {% endfor %}
-            </ul>
+<h1 class="display-4 fw-normal text-center mt-4">{{ product.name }}</h1>
+<div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+    <h4>{{ product.description }}</h4>
+            <h4>{{ product.price }}</h4><br>
+            <div class="d-flex">
+                {% if product.image_1 %}
+                <img style="margin-right: 60px;" src="{{ product.image_1.url }}" width="300" height="300"/><br><br>
+                {% endif %}
+                {% if product.image_2 %}
+                <img style="margin-right: 60px;" src="{{ product.image_2.url }}" width="300" height="300"/><br><br>
+                {% endif %}
+                {% if product.image_3 %}
+                <img src="{{ product.image_3.url }}" width="300" height="300"/><br><br>
+                {% endif %}
+            </div>
+            <div style="margin-top: 60px;" class="d-flex">
+                {% if product.image_4 %}
+                <img style="margin-right: 60px;" src="{{ product.image_4.url }}" width="300" height="300"/><br><br>
+                {% endif %}
+                {% if product.image_5 %}
+                <img style="margin-right: 60px;" src="{{ product.image_5.url }}" width="300" height="300"/><br><br>
+                {% endif %}
+                {% if product.image_6 %}
+                <img src="{{ product.image_6.url }}" width="300" height="300"/><br><br>
+                {% endif %}
+            </div><br>
+            {% if user == product.user %}
+                {% if product.offers.all %}
+                    <h4>Предложения по товему продукту:</h4>
+                    <ul>
+                        {% for offer in product.offers.all %}
+                            <li style="list-style-image: url('/media/li-style.svg'); margin-left: 20px;" class="fs-5 text-muted"><a href="{% url 'profile' offer.user.username %}">{{ offer.user }}</a> предлагает {{ offer.price }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <h4 class="fs-5 text-muted">Тут будут отображаться предложения по товему продукту💸</h4>
+                {% endif %} 
+                </div>
             {% else %}
-                <h4 class="fs-5 text-muted">Офферов к этому продукту нет(</h4>
-            {% endif %} 
-        </div>
-    {% else %}
-        <h1 class="display-4 fw-normal text-center mt-4">{{ product.name }}</h1>
-        <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
-            <h4>{{ product.description }}</h4>
-            <h4>{{ product.price }}</h4>
-            <img src="{{ product.image.url }}" width="300" height="300" class="mb-5"/>
-            {% if user.is_authenticated %}
             {% if offers %}
                 <h4 style="margin-bottom: 20px;">Ваши offer'ы по продукту:</h4>
                 <ul class="mb-4">
@@ -54,8 +69,9 @@
                     {% endfor %} 
                     </form>
                     <a href="{% url 'profile' product.user.username %}" class="pinkbutton profilebutton">Профиль продавца</a><br><br>
-                        <a href="{% url 'favorite-delete' favorite.id %}" class="pinkbutton profilebutton" style="padding-left: 61px; padding-right: 61px;">Удалить из избранного</a>
-            {% endif %}
+                    {% if favorite.id %}
+                        <a href="{% url 'favorite-delete' product.id %}" class="pinkbutton profilebutton" style="padding-left: 61px; padding-right: 61px;">Удалить из избранного</a>
+                    {% endif %}
+        {% endif %}
         </div>
-    {% endif %}
 {% endblock %}

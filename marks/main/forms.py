@@ -48,7 +48,7 @@ class Profile_Of_Form(ModelForm):
 class ProductForm(ModelForm):
     class Meta:
         model = Product
-        fields = ["name", "description", "price", "image"]
+        fields = ["name", "description", "price", "image_1", "image_2", "image_3", "image_4", "image_5", "image_6"]
         widgets = {
             "name": TextInput(attrs={
                 'class': 'form-control',
@@ -59,7 +59,22 @@ class ProductForm(ModelForm):
             "price": TextInput(attrs={
                 'class': 'form-control',
             }),
-            "image": FileInput(attrs={
+            "image_1": FileInput(attrs={
+                'class': 'form-control',
+            }),
+            "image_2": FileInput(attrs={
+                'class': 'form-control',
+            }),
+            "image_3": FileInput(attrs={
+                'class': 'form-control',
+            }),
+            "image_4": FileInput(attrs={
+                'class': 'form-control',
+            }),
+            "image_5": FileInput(attrs={
+                'class': 'form-control',
+            }),
+            "image_6": FileInput(attrs={
                 'class': 'form-control',
             }),
         }

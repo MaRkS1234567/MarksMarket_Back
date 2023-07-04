@@ -1,7 +1,7 @@
 {% extends 'main/base.html' %}
 
 {% block title %}
-{{ product.name }}
+{{ yields.name }}
 {% endblock %}
 
 {% block content %}
@@ -12,8 +12,29 @@
     <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
         <h4>{{ yields.description }}</h4><br>
         <h4>{{ yields.price }}</h4><br>
-        <img src="{{ yields.image.url }}" width="300" height="300" class="mb-5"/><br>
-        <a href="{% url 'favorite-delete' favorite_for_yield.id %}" class="pinkbutton profilebutton" style="padding-left: 61px; padding-right: 61px;">Удалить из избранного</a><br><br>
+        <div class="d-flex">
+            {% if yields.image_1 %}
+            <img style="margin-right: 60px;" src="{{ yields.image_1.url }}" width="300" height="300"/><br><br>
+            {% endif %}
+            {% if yields.image_2 %}
+            <img style="margin-right: 60px;" src="{{ yields.image_2.url }}" width="300" height="300"/><br><br>
+            {% endif %}
+            {% if yields.image_3 %}
+            <img src="{{ yields.image_3.url }}" width="300" height="300"/><br><br>
+            {% endif %}
+        </div>
+        <div style="margin-top: 60px;" class="d-flex">
+            {% if yields.image_4 %}
+            <img style="margin-right: 60px;" src="{{ yields.image_4.url }}" width="300" height="300"/><br><br>
+            {% endif %}
+            {% if yields.image_5 %}
+            <img style="margin-right: 60px;" src="{{ yields.image_5.url }}" width="300" height="300"/><br><br>
+            {% endif %}
+            {% if yields.image_6 %}
+            <img src="{{ yields.image_6.url }}" width="300" height="300"/><br><br>
+            {% endif %}
+        </div><br>
+        <a href="{% url 'favorite-delete' yields.id %}" class="pinkbutton profilebutton" style="padding-left: 61px; padding-right: 61px;">Удалить из избранного</a><br><br>
         <a href="{% url 'order' yields.id %} " class="pinkbutton likebutton" style="padding-left: 91px; padding-right: 91px;">Заказать товар</a>
     </div>
 {% endblock %}

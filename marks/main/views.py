@@ -275,13 +275,13 @@ def news(request, news_id):
 def product(request, product_id):
     product = get_object_or_404(
         Product.objects.prefetch_related('offers'), id=product_id)
-    favorite = Favorite.objects.get(product = product, user=request.user)
+    # favorite = Favorite.objects.get(product = product, user=request.user)
     offers = Offer.objects.filter(user = request.user, product = product)
 
     context = {
         'offers': offers,
         'product': product,
-        'favorite': favorite,
+        # 'favorite': favorite,
         'offer_form': OfferForm()
     }
 
@@ -306,11 +306,11 @@ def product(request, product_id):
 
 def yields(request, yield_id):
     yields = get_object_or_404(Yield, id=yield_id)
-    favorite_for_yield = Favorite.objects.get(yields=yields, user=request.user)
+    # favorite_for_yield = Favorite.objects.get(yields=yields, user=request.user)
 
     context = {
         'yields': yields,
-        'favorite_for_yield': favorite_for_yield,
+        # 'favorite_for_yield': favorite_for_yield,
     }
     return render(request, 'main/yield.html', context)
 

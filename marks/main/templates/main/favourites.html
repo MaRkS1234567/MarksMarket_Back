@@ -11,14 +11,14 @@
             {% if favorite.product.name %}
                 <div class="p-4 p-md-5 mb-4  rounded bg-dark d-flex">
                     <a class="display-6 text-white fw-normal account" style="padding: 2.75rem 0;" href="{% url 'product' favorite.product.id %}">{{ favorite.product.name }}</a>
-                    <img src="{{ favorite.product.image.url }}" width="150" height="150" style="margin-left:auto;" />
+                    <img src="{{ favorite.product.image_1.url }}" width="150" height="150" style="margin-left:auto;" />
                 </div>
             {% endif %}
             {% if favorite.yields.name %}
                 <div class="p-4 p-md-5 mb-4  rounded bg-dark d-flex">
                     <a class="display-6 text-white fw-normal account" style="padding: 2.75rem 0;" href="{% url 'yields' favorite.yields.id %}">{{ favorite.yields.name }} </a>
                     <h5 style="color: white; padding-top: 60px; padding-left: 15px;"> ( товар от нашей платформы ✅ )</h5>
-                    <img src="{{ favorite.yields.image.url }}" width="150" height="150" style="margin-left:auto;" />
+                    <img src="{{ favorite.yields.image_1.url }}" width="150" height="150" style="margin-left:auto;" />
                 </div>
             {% endif %}
         {% endfor %}

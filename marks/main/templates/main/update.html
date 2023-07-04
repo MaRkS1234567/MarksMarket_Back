@@ -18,10 +18,17 @@ Update
         <label for="startsdate" class="display-7 fw-normal my-4 ">Введите цену товара:</label>
         <p id="price">{{ form.price }}</p>
 
-        <label for="finishdate" class="display-7 fw-normal my-4 ">Прикрепите картинку:</label>
-        <p id="image">{{ form.image }}</p>
-
-        
+        <label for="finishdate" class="display-7 fw-normal my-4 ">Добавте фото:</label>
+        <div class="d-flex">
+          <p style="min-width: 820px; margin-right: 15px;">{{ form.image_1 }}</p><input type="button" id="add_photo" value="Добавать еще фото" class="form-control" style="max-height: 38px;"/>
+        </div>
+        <div id="div_photo" class="hidden">
+            <p>{{ form.image_2 }}</p>
+            <p>{{ form.image_3 }}</p>
+            <p>{{ form.image_4 }}</p>
+            <p>{{ form.image_5 }}</p>
+            <p>{{ form.image_6 }}</p>
+        </div>
         {{ error }}
         <h4 class="fs-5 text-muted mb-3">* пожалуйста прикрепляйте картинку в квадратном формате.</h4>
 

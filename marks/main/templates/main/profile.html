@@ -23,7 +23,7 @@
         {% for product in page_ %}
         <div class="p-4 p-md-5 mb-4  rounded bg-dark d-flex">
             <a class="display-6 text-white fw-normal account" style="padding: 2.75rem 0;" href="{% url 'product' product.id %}">{{ product.name }}</a>
-            <img src="{{ product.image.url }}" width="150" height="150" style="margin-left:auto;" />
+            <img src="{{ product.image_1.url }}" width="150" height="150" style="margin-left:auto;" />
         </div>
         {% endfor %}
         {% if page_.has_previous %}

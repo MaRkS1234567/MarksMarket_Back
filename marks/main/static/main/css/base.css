@@ -301,7 +301,19 @@ footer {
 }
 
 .logo {
-  margin-left: 120px;
+  margin-left: 15px;
+}
+
+.bt {
+  transition: all .6s ease;
+  border-radius: 5px;
+  background-color: #212529;
+  text-align: center;
+}
+
+.bt:hover {
+  background: #006600;
+  color: white;
 }
 
 .nstyle {
@@ -446,14 +458,12 @@ footer {
   height: 410px;
 } */
 
-.pink:hover {
-  
+.hidden {
+  display: none;
+  visibility: hidden;
 }
 
-.blue:hover {
-  
-}
-
-.green:hover {
-  
+.showen {
+  display: block;
+  visibility: visible;
 }

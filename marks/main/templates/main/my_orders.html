@@ -12,7 +12,7 @@
     {% for order in orders %}
         <div class="p-4 p-md-5 mb-4  rounded bg-dark d-flex">
             <a class="display-6 text-white fw-normal account" style="padding: 2.75rem 0;" href="{% url 'yields' order.yields.id %}">{{ order.yields.name }}</a>
-            <img src="{{ order.yields.image.url }}" width="150" height="150" style="margin-left:auto;" />
+            <img src="{{ order.yields.image_1.url }}" width="150" height="150" style="margin-left:auto;" />
             <a href="{% url 'order-update' order.id %}" class="update">Редактировать</a>
         </div>
     {% endfor %}

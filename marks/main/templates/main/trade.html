@@ -21,7 +21,30 @@
                 <h1>{{ product.name }}</h1>
                 <h4 class="fs-5 text-muted">{{ product.description }}</h4>
                 <h4>{{ product.price }}</h4><br>
-                <img src="{{ product.image.url }}" width="300" height="300"/><br><br>
+                <div class="d-flex">
+                    {% if product.image_1 %}
+                        <img style="margin-right: 60px;" src="{{ product.image_1.url }}" width="300" height="300"/><br><br>
+                    {% endif %}
+                    {% if product.image_2 %}
+                        <img style="margin-right: 60px;" src="{{ product.image_2.url }}" width="300" height="300"/><br><br>
+                    {% endif %}
+                    {% if product.image_3 %}
+                        <img style="margin-right: 60px;" src="{{ product.image_3.url }}" width="300" height="300"/><br><br>
+                    {% endif %}
+                    <a href="{% url 'product' product.id %}" id="bt-2" class="update bt">Смотреть всё</a>
+                </div>
+                <br>
+                <!-- <div id="div-2" class="d-flex">
+                    {% if product.image_4 %}
+                        <img style="margin-right: 60px;" src="{{ product.image_4.url }}" width="300" height="300"/><br><br>
+                    {% endif %}
+                    {% if product.image_5 %}
+                        <img style="margin-right: 60px;" src="{{ product.image_5.url }}" width="300" height="300"/><br><br>
+                    {% endif %}
+                    {% if product.image_6 %}
+                        <img src="{{ product.image_6.url }}" width="300" height="300"/><br><br>
+                    {% endif %}
+                </div><br><br> -->
                 <h4>{{after.id}}</h4>
                 {% comment %} {% if product.offers %}
                     <ul><br><br>
@@ -82,9 +105,16 @@
                 {{ product_form.description }}<br>
                 <p class="fs-5 text-muted">Введите цену товара:</p>
                 {{ product_form.price }}<br>
-                <p class="fs-5 text-muted">Прикрепите картинку:</p>
+                <p class="fs-5 text-muted">Добавте фото:</p>
                 <div class="d-flex">
-                    <p style="min-width: 820px; margin-right: 15px;">{{ product_form.image }}</p><input type="button" value="Добавать еще фото" class="form-control" style="max-height: 38px;"/>
+                    <p style="min-width: 820px; margin-right: 15px;">{{ product_form.image_1 }}</p><input type="button" id="add_photo" value="Добавать еще фото" class="form-control" style="max-height: 38px;"/>
+                </div>
+                <div id="div_photo" class="hidden">
+                    <p>{{ product_form.image_2 }}</p>
+                    <p>{{ product_form.image_3 }}</p>
+                    <p>{{ product_form.image_4 }}</p>
+                    <p>{{ product_form.image_5 }}</p>
+                    <p>{{ product_form.image_6 }}</p>
                 </div>
                 <p class="fs-5 text-muted">*пожалуйста прикрепляйте картинку в квадратном формате</p>
                 <button type="submit" class="pinkbutton mt-1 mb-1" name="form_type" value="product_form">Добавить</button>
@@ -95,4 +125,12 @@
         <a href="register" class="pinkbutton me-2 mb-2">Зарегестрируйся, и выложи свой продукт</a><br><br>
     {% endif %}
     </div>
+    <!-- <script>
+        const buttonEl = document.getElementById('add_photo')
+        const divEl = document.getElementById('div_photo')
+        buttonEl.addEventListener('click', ()=> {
+            divEl.classList.toggle("hidden");
+            divEl.classList.toggle("showen");
+        })
+    </script> -->
 {% endblock %}

@@ -19,7 +19,18 @@
                 <h1>{{ yield.name }}</h1>
                 <h4 class="fs-5 text-muted">{{ yield.description }}</h4>
                 <h4>{{ yield.price }}</h4><br>
-                <img src="{{ yield.image.url }}" width="300" height="300"/><br>
+                <div class="d-flex">
+                    {% if yield.image_1 %}
+                        <img style="margin-right: 60px;" src="{{ yield.image_1.url }}" width="300" height="300"/><br><br>
+                    {% endif %}
+                    {% if yield.image_2 %}
+                        <img style="margin-right: 60px;" src="{{ yield.image_2.url }}" width="300" height="300"/><br><br>
+                    {% endif %}
+                    {% if yield.image_3 %}
+                        <img style="margin-right: 60px;" src="{{ yield.image_3.url }}" width="300" height="300"/><br><br>
+                    {% endif %}
+                    <a href="{% url 'yields' yield.id %}" id="bt-2" class="update bt">Смотреть всё</a>
+                </div>
                 <form method="post" action="{% url 'favorite_for_yields' yield.id %}">
                     {% csrf_token %}
                     <button type="submit" class="pinkbutton likebutton">Добавить в избранное</button>

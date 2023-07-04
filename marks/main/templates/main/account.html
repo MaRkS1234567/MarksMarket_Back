@@ -22,10 +22,10 @@
             <div style="margin-left: auto;">
                 {% for favorite in favorites %}
                     {% if favorite.product.name %} 
-                        <img src="{{ favorite.product.image.url }}" width="150" height="150" style="margin-left: 50px;" />
+                        <img src="{{ favorite.product.image_1.url }}" width="150" height="150" style="margin-left: 50px;" />
                     {% endif %}
                     {% if favorite.yields.name %}
-                        <img src="{{ favorite.yields.image.url }}" width="150" height="150" style="margin-left: 50px;" />
+                        <img src="{{ favorite.yields.image_1.url }}" width="150" height="150" style="margin-left: 50px;" />
                     {% endif %}
                 {% endfor %}
             </div>
@@ -33,7 +33,7 @@
 
     {% else %}
     <div class="text-center">
-        <a href="{% url 'trade' %}" class="pinkbutton text-center">Корзина пуста! Скорее за покупками🤠</a><br>
+        <a href="{% url 'trade' %}" class="pinkbutton text-center">В избранном пусто! Скорее за покупками🤠</a><br>
     </div><br>
     {% endif %}
 
@@ -45,7 +45,7 @@
         <a class="display-6 fw-normal text-white account" style="padding: 2.75rem 0;" href="{% url 'my_products' %}">Мои товары</a>  
         <div style="margin-left: auto;">
             {% for product in products %}
-                <img src="{{ product.image.url }}" width="150" height="150" style="margin-left:50px;" />
+                <img src="{{ product.image_1.url }}" width="150" height="150" style="margin-left:50px;" />
             {% endfor %}
         </div>
     </div>
@@ -62,7 +62,7 @@
             <a class="display-6 text-white fw-normal account" style="padding: 2.75rem 0;" href="{% url 'my_orders' %}">Мои заказы</a>
             <div style="margin-left: auto;">
                 {% for order in orders %}
-                    <img src="{{ order.yields.image.url }}" width="150" height="150" style="margin-left:50px;" />
+                    <img src="{{ order.yields.image_1.url }}" width="150" height="150" style="margin-left:50px;" />
                 {% endfor %}
             </div>
         </div>

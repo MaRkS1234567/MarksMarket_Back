@@ -14,7 +14,7 @@
     {% if news.comments %}
         {% for comment in news.comments.all %}
         <ul>
-            <li class="fs-5 text-muted">{{ comment.user }}: {{ comment.comment }}</li>
+            <li style="list-style-image: url('/media/li-style.svg'); margin-left: 20px;" class="fs-5 text-muted">{{ comment.user }}: {{ comment.comment }}</li>
         </ul>
         {% endfor %}
     {% else %}

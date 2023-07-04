@@ -51,7 +51,12 @@ class Product(models.Model):
     name = models.CharField(max_length=15)
     description = models.TextField()
     price = models.PositiveIntegerField()
-    image = models.ImageField(upload_to='products/')
+    image_1 = models.ImageField(upload_to='products/')
+    image_2 = models.ImageField(upload_to='products/', null=True, blank=True)
+    image_3 = models.ImageField(upload_to='products/', null=True, blank=True)
+    image_4 = models.ImageField(upload_to='products/', null=True, blank=True)
+    image_5 = models.ImageField(upload_to='products/', null=True, blank=True)
+    image_6 = models.ImageField(upload_to='products/', null=True, blank=True)
 
     def get_absolute_url(self):
         return f'/account'
@@ -64,7 +69,12 @@ class Yield(models.Model):
     name = models.CharField(max_length=15)
     description = models.TextField()
     price = models.PositiveIntegerField()
-    image = models.ImageField(upload_to='products/')
+    image_1 = models.ImageField(upload_to='products/', null=True, blank=True)
+    image_2 = models.ImageField(upload_to='products/', null=True, blank=True)
+    image_3 = models.ImageField(upload_to='products/', null=True, blank=True)
+    image_4 = models.ImageField(upload_to='products/', null=True, blank=True)
+    image_5 = models.ImageField(upload_to='products/', null=True, blank=True)
+    image_6 = models.ImageField(upload_to='products/', null=True, blank=True)
 
     def get_absolute_url(self):
         return f'/account'
